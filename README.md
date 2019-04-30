@@ -1,17 +1,19 @@
 <p align="left" >
-<img src="./owl_logo.png" height=128px alt="SwiftDate" title="Owl">
+<img src="./owl_logo.png" width=357px alt="SwiftDate" title="Owl">
 </p>
 
-Owl offers a data-driven declarative approach for building fast & flexible list (UICollectionView & UITableView) in iOS.
+Owl offers a data-driven declarative approach for building fast & flexible list in iOS.
+
+It supports both UICollectionView & UITableView; UIStackView is on the way!)
 
 |  	| Features Highlights 	|
 |---	|---------------------------------------------------------------------------------	|
-| 🕺 	| No more delegates & datasource. Just a fully type-safe declarative content approach. 	|
-| 🧩 	| Better architecture to reuse components e decuple data from UI. 	|
-| 🌈 	| Animate content changes automatically, no `reloadData`/`performBatchUpdates`. 	|
+| 🕺 	| No more delegates & datasource. Just a fully type-safe declarative content approach 	|
+| 🧩 	| Better architecture to reuse components e decuple data from UI 	|
+| 🌈 	| Animate content changes automatically, no `reloadData`/`performBatchUpdates` 	|
 | 🚀 	| Blazing fast diff algorithm based upon [DifferenceKit](https://github.com/ra1028/DifferenceKit) 	|
 | 🧬 	| It uses standard UIKit components at its core. No magic! 	|
-| 💎 	| (COMING SOON) Support for scrollable declarative/fully customizable stack view. 	|
+| 💎 	| (COMING SOON) Support for scrollable declarative/fully customizable stack view 	|
 | 🐦 	| Fully made in Swift from Swift ❥ lovers 	|
 
 Owl was created and maintaned by [Daniele Margutti](https://github.com/malcommac) - My home site [www.danielemargutti.com](https://www.danielemargutti.com).
@@ -68,6 +70,7 @@ director?.reload()
 
 - Owl is released under the Apache 2.0 License.
 - DifferenceKit is released under the Apache 2.0 License.
+- Owl Icon is made by <a href="https://www.freepik.com/?__hstc=57440181.2ec9032a4253af7a6c076e26b17c0e4f.1556611478423.1556611478423.1556635522124.2&__hssc=57440181.7.1556635522124&__hsfp=2502665684" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
  
 [Full License File](./LICENSE).
 
