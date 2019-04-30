@@ -4,7 +4,7 @@
 
 Owl offers a data-driven declarative approach for building fast & flexible list in iOS.
 
-It supports both UICollectionView & UITableView; UIStackView is on the way!)
+It supports both `UICollectionView` & `UITableView`; *`UIStackView` is on the way!*
 
 |  	| Features Highlights 	|
 |---	|---------------------------------------------------------------------------------	|
