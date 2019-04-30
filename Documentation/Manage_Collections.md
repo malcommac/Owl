@@ -2,20 +2,22 @@
 
 # 5 - APIs: Manage `UICollectionView`
 
-- 5.1 - `CollectionDirector` & `FlowCollectionDirector`
-	- `CollectionDirector` Properties
-	- `FlowCollectionDirector` Additional Properties
-	- Methods: Register Adapters (Cell/Header/Footer)
-	- Methods: Manage Contents
-- 5.2 - Manage Sections: `CollectionSection`
-	- Properties
-	- Methods: Manage Contents
-- 5.3 - Manage Cells: `CollectionAdapter`
-	- Introduction
-	- Available Events
-- 5.4 - Manage Header/Footer: `CollectionHeaderFooterAdapter `
-	- Introduction
-	- Available Events
+- [5.1 - `CollectionDirector` & `FlowCollectionDirector`](#5.1)
+	- [`CollectionDirector` Properties](#5.1.1)
+	- [`FlowCollectionDirector` Additional Properties](#5.1.2)
+	- [Methods: Register Adapters (Cell/Header/Footer)](#5.1.3)
+	- [Methods: Manage Contents](#5.1.4)
+- [5.2 - Manage Sections: `CollectionSection`](#5.2)
+	- [Properties](#5.2.1)
+	- [Methods: Manage Contents](5.2.2)
+- [5.3 - Manage Cells: `CollectionAdapter`](#5.3)
+	- [Introduction](#5.3.1)
+	- [Available Events](#5.3.2)
+- 5.[4 - Manage Header/Footer: `CollectionHeaderFooterAdapter`](#5.4)
+	- [Introduction](#5.4.1)
+	- [Available Events](#5.4.2)
+
+<a name="5.1"/>
 
 ## `CollectionDirector` & `FlowCollectionDirector`
 
@@ -23,14 +25,16 @@
 If you are about to use a Flow-Layout based collection view you should use `FlowCollectionDirector` instead because it offers more specific properties and events.
 
 ```swift
-	// For Flow-Layout based collection views
-	director = FlowCollectionDirector(collection: myCollectionView)
+// For Flow-Layout based collection views
+director = FlowCollectionDirector(collection: myCollectionView)
 	
-	// Other generic collection views
-	director = CollectionDirector(collection: myCollectionView)
+// Other generic collection views
+director = CollectionDirector(collection: myCollectionView)
 ```
 
 You should keep it alive (usually you will create a property in your view controller).
+
+<a name="5.1.1"/>
 
 ### `CollectionDirector` Properties
 
@@ -41,6 +45,8 @@ You should keep it alive (usually you will create a property in your view contro
 | `firstSection` (`CollectionSection `) 	| Return the first section of the collection. 	|
 | `lastSection` (`CollectionSection `) 	| Return the last section of the collection. 	|
 | `scrollEvents` (`CollectionSection `) 	| Entry point to listen for base `UIScrollViewDelegate` events. See the `Listen for UIScrollViewDelegate` events below. 	|
+
+<a name="5.1.2"/>
 
 ### `FlowCollectionDirector` Additional Properties
 
@@ -54,6 +60,8 @@ You should keep it alive (usually you will create a property in your view contro
 | `stickyFooters` (`Bool`) 	| When this property is true, section footer views scroll with content until they reach the bottom of the screen, at which point they are pinned to the lower bounds of the collection view. Each new footer view that scrolls to the bottom of the screen pushes the previously pinned footer view offscreen. The default value of this property is `false`. 	|
 | `sectionInsetReference` (`SectionInsetReference`) 	| Set the section reference starting point.	|
 
+<a name="5.1.3"/>
+
 ### Methods: Register Adapters (Cell/Header/Footer)
 
 | Method 	| Description 	|
@@ -62,6 +70,8 @@ You should keep it alive (usually you will create a property in your view contro
 | `registerCellAdapter()` 	| Register a new adapter for the collection. An adapter represent the entity composed by the pair used by the directory to manage their representation inside the collection itself. If adapter is already registered it will be ignored automatically. 	|
 | `registerHeaderFooterAdapters()` 	| Register a set of adapters to render header/footer's custom views. 	|
 | `registerHeaderFooterAdapter()` 	| Register a new adapter to render custom header/footer's view. 	|
+
+<a name="5.1.4"/>
 
 ### Methods: Manage Content
 
@@ -79,6 +89,8 @@ You should keep it alive (usually you will create a property in your view contro
 | `move(from:to:)` 	| Move section at specified index to a destination index. If indexes are invalids no operation is made. 	|
 | `add(elements:inSection:)` 	| Append items at the bottom of section at specified index. If section index is not specified a new section is created and append, at the end of the collection with all items. 	|
 
+<a name="5.2"/>
+
 ## Manage Sections: `CollectionSection`
 
 `CollectionSection` represent a single section in a UICollectionView.
@@ -92,6 +104,8 @@ A `CollectionSection` may have:
 - `footerTitle` if set it shows a simple string-based footer.
 - `headerView` if set it shows a custom view header. View must be registered by using director's `registerHeaderFooterAdapters()` function and passing an instance of `CollectionHeaderFooterAdapter<YourCustomView>`.
 - `footerTitle` if set it shows a custom view footer. See `headerView` for more info.
+
+<a name="5.2.1"/>
 
 ### Properties
 
@@ -115,6 +129,7 @@ For Flow Layout collection view these properties are also available:
  	|
 | `minimumLineSpacing ` (`CGFloat?`) 	| The minimum spacing (in points) to use between rows or columns. If you do not implement this method, value is obtained from the properties of the flow layout object.
  	
+<a name="5.2.2"/>
 
 ### Methods: Manage Content
 
@@ -130,7 +145,11 @@ For Flow Layout collection view these properties are also available:
 | `move(swappingAt:with:)` 	| Swap element at given index to another destination index. 	|
 | `move(from:to:)` 	| Remove element at given index and insert at destination index. 	|
 
+<a name="5.3"/>
+
 ## Manage Cells: `CollectionAdapter`
+
+<a name="5.3.1"/>
 
 ### Introduction
 
@@ -156,6 +175,8 @@ let emojiAdapter = CollectionCellAdapter<String, EmojiCell> { adapter in
 }
 director?.registerAdapter(emojiAdapter)
 ```
+
+<a name="5.3.2"/>
 
 ### Available Events
 
@@ -190,7 +211,11 @@ This is the list of all events you can subscribe; they are equivalent to the cla
 | `cancelPrefetch` 	|
 | `shouldSpringLoad` 	|
 
+<a name="5.4"/>
+
 ## Manage Header/Footer: `CollectionHeaderFooterAdapter`
+
+<a name="5.4.1"/>
 
 ### Introduction
 
@@ -215,6 +240,8 @@ director?.registerHeaderFooterAdapter(myHeaderAdapter)
 // STEP 3: Use it for your section(s)
 let section = CollectionSection(id: "Section \(idx)", elements: elements, header: myHeaderAdapter)
 ```
+
+<a name="5.4.2"/>
 
 ### Available Events
 
