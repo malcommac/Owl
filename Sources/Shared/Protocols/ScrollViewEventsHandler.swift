@@ -1,9 +1,13 @@
 //
-//  Shared.swift
-//  FlowKit2
+//  Owl
+//  A declarative type-safe framework for building fast and flexible list with Tables & Collections
 //
-//  Created by dan on 27/03/2019.
-//  Copyright © 2019 FlowKit2. All rights reserved.
+//  Created by Daniele Margutti
+//   - Web: https://www.danielemargutti.com
+//   - Twitter: https://twitter.com/danielemargutti
+//   - Mail: hello@danielemargutti.com
+//
+//  Copyright © 2019 Daniele Margutti. Licensed under Apache 2.0 License.
 //
 
 import UIKit
