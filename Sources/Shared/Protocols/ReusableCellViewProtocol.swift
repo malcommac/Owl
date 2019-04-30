@@ -126,10 +126,6 @@ extension UITableViewCell : ReusableCellViewProtocol {
 	}
 }
 
-extension UICollectionViewCell : ReusableCellViewProtocol {
-
-}
-
 extension UICollectionReusableView: ReusableCellViewProtocol {
 	public static var reusableViewClass: AnyClass {
 		return self
