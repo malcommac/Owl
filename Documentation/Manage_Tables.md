@@ -1,3 +1,5 @@
+[< Back to Index](../README.md)
+
 # 4 - APIs: Manage `UITableView`
 
 - 4.1 - `TableDirector`

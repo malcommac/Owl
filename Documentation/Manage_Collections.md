@@ -1,3 +1,5 @@
+[< Back to Index](../README.md)
+
 # 5 - APIs: Manage `UICollectionView`
 
 - 5.1 - `CollectionDirector` & `FlowCollectionDirector`
