@@ -1,4 +1,4 @@
-[< Back to Index](../README.md)
+[< Back to Index](../README.md#doc)
 
 # 6 - APIs: Listen for `UIScrollViewDelegate` events
 

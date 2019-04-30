@@ -1,4 +1,4 @@
-[< Back to Index](../README.md)
+[< Back to Index](../README.md#doc)
 
 <a name="index"/>
 
@@ -256,5 +256,5 @@ The list of events is the same of a classic `UITableView` so please refer to the
 | `willDisplay` 	|
 
 
-- [< Back to Index](../README.md)
+- [< Back to Index](../README.md#doc)
 - [< Back to Top](#index)

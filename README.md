@@ -74,6 +74,8 @@ director?.reload()
  
 [Full License File](./LICENSE).
 
+<a name="doc"/>
+
 ## Documentation
 
 - 1 - [Introduction: Director & Adapters](#1)

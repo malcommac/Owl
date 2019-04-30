@@ -1,4 +1,4 @@
-[< Back to Index](../README.md)
+[< Back to Index](../README.md#doc)
 
 <a name="index"/>
 
@@ -265,5 +265,5 @@ The list of events is the same of a classic `UICollectionView` so please refer t
 | `endDisplay` 	|
 | `willDisplay` 	|
 
-- [< Back to Index](../README.md)
+- [< Back to Index](../README.md#doc)
 - [< Back to Top](#index)
