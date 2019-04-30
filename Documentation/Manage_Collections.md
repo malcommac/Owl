@@ -1,5 +1,7 @@
 [< Back to Index](../README.md)
 
+<a name="index"/>
+
 # 5 - APIs: Manage `UICollectionView`
 
 - [5.1 - `CollectionDirector` & `FlowCollectionDirector`](#5.1)
@@ -13,7 +15,7 @@
 - [5.3 - Manage Cells: `CollectionAdapter`](#5.3)
 	- [Introduction](#5.3.1)
 	- [Available Events](#5.3.2)
-- 5.[4 - Manage Header/Footer: `CollectionHeaderFooterAdapter`](#5.4)
+- [5.4 - Manage Header/Footer: `CollectionHeaderFooterAdapter`](#5.4)
 	- [Introduction](#5.4.1)
 	- [Available Events](#5.4.2)
 
@@ -262,3 +264,6 @@ The list of events is the same of a classic `UICollectionView` so please refer t
 | `didDisplay` 	|
 | `endDisplay` 	|
 | `willDisplay` 	|
+
+- [< Back to Index](../README.md)
+- [< Back to Top](#index)

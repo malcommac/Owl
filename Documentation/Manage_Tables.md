@@ -1,20 +1,24 @@
 [< Back to Index](../README.md)
 
+<a name="index"/>
+
 # 4 - APIs: Manage `UITableView`
 
-- 4.1 - `TableDirector`
-	- Properties
-	- Methods: Register Adapters (Cell/Header/Footer)
-	- Methods: Manage Contents
-- 4.2 - Manage Sections: `TableSection`
-	- Properties
-	- Methods: Manage Contents
-- 4.3 - Manage Cells: `TableAdapter`
-	- Introduction
-	- Available Events
-- 4.4 - Manage Header/Footer: `TableHeaderFooterAdapter `
-	- Introduction
-	- Available Events
+- [4.1 - `TableDirector`](#4.1)
+	- [Properties](#4.1.1)
+	- [Methods: Register Adapters (Cell/Header/Footer)](#4.1.2)
+	- [Methods: Manage Contents](#4.1.3)
+- [4.2 - Manage Sections: `TableSection`](#4.2)
+	- [Properties](#4.2.1)
+	- [Methods: Manage Contents](#4.2.2)
+- [4.3 - Manage Cells: `TableAdapter`](#4.3)
+	- [Introduction](#4.3.1)
+	- [Available Events](#4.3.2)
+- [4.4 - Manage Header/Footer: `TableHeaderFooterAdapter`](#4.4)
+	- [Introduction](#4.4.1)
+	-[ Available Events](#4.4.2)
+	
+<a name="4.1"/>
 
 ## `TableDirector`
 
@@ -27,6 +31,8 @@ The only init allowed require a valid instance of `UITableView`.
 
 You should keep it alive (usually you will create a property in your view controller).
 
+<a name="4.1.1"/>
+
 ### Properties
 
 | Property 	| Description 	|
@@ -37,6 +43,8 @@ You should keep it alive (usually you will create a property in your view contro
 | `lastSection` (`TableSection`) 	| Return the last section of the table. 	|
 | `rowHeight` (`RowHeight`) 	| Height of the row. `explicit` to use a fixed row height (suggested if you don't plan to have dynamic sized rows), `auto(estimated:)` to use autolayout for cell-sizing, `default` to set `automaticDimension`. 	|
 
+<a name="4.1.2"/>
+
 ### Methods: Register Adapters (Cell/Header/Footer)
 
 | Method 	| Description 	|
@@ -45,6 +53,8 @@ You should keep it alive (usually you will create a property in your view contro
 | `registerCellAdapter()` 	| Register a new adapter for the table. An adapter represent the entity composed by the pair used by the directory to manage their representation inside the table itself. If adapter is already registered it will be ignored automatically. 	|
 | `registerHeaderFooterAdapters()` 	| Register a set of adapters to render header/footer's custom views. 	|
 | `registerHeaderFooterAdapter()` 	| Register a new adapter to render custom header/footer's view. 	|
+
+<a name="4.1.3"/>
 
 ### Methods: Manage Content
 
@@ -62,6 +72,8 @@ You should keep it alive (usually you will create a property in your view contro
 | `move(from:to:)` 	| Move section at specified index to a destination index. If indexes are invalids no operation is made. 	|
 | `add(elements:inSection:)` 	| Append items at the bottom of section at specified index. If section index is not specified a new section is created and append, at the end of the table with all items. 	|
 
+<a name="4.2"/>
+
 ## Manage Sections: TableSection
 
 TableSection represent a single section in a UITableView.
@@ -76,6 +88,8 @@ A `TableSection` may have:
 - `headerView` if set it shows a custom view header. View must be registered by using director's `registerHeaderFooterAdapters()` function and passing an instance of `TableHeaderFooterAdapter<YourCustomView>`.
 - `footerTitle` if set it shows a custom view footer. See `headerView` for more info.
 
+<a name="4.2.1"/>
+
 ### Properties
 
 | Property 	| Description 	|
@@ -88,6 +102,8 @@ A `TableSection` may have:
 | `isCollapsed` (`Bool`) 	| If true the section is collapsed and no elements/rows are visible (elements are hidden but kept alive) 	|
 | `indexTitle` (`String`) 	| Title of the section in right single char column of the table. If value is set it will displayed into the table's section indexes. 	|
 | `elements` (`[ElementRepresentable]`) 	| Array of elements inside the section. Use methods below to manipulate them. 	|
+
+<a name="4.2.2"/>
 
 ### Methods: Manage Content
 
@@ -103,7 +119,11 @@ A `TableSection` may have:
 | `move(swappingAt:with:)` 	| Swap element at given index to another destination index. 	|
 | `move(from:to:)` 	| Remove element at given index and insert at destination index. 	|
 
+<a name="4.3"/>
+
 ## Manage Cells: `TableAdapter`
+
+<a name="4.3.1"/>
 
 ### Introduction
 
@@ -131,6 +151,8 @@ let contactAdapter = TableCellAdapter<Contact,ContactCell> { dr in
 
 director?.registerAdapter(contactAdapter)
 ```
+
+<a name="4.3.2"/>
 
 ### Available Events
 
@@ -181,7 +203,11 @@ This is the list of all events you can subscribe; they are equivalent to the cla
 | `leadingSwipeActions` 	|
 | `trailingSwipeActions` 	|
 
+<a name="4.4"/>
+
 ## Manage Header/Footer: `TableHeaderFooterAdapter`
+
+<a name="4.4.1"/>
 
 ### Introduction
 
@@ -205,6 +231,8 @@ director?.registerHeaderFooterAdapter(headerAdapter)
 let section = TableSection(id: "Section \(idx)", elements: elements, header: myHeaderAdapter)
 ```
 
+<a name="4.4.2"/>
+
 ### Available Events
 
 Also `TableHeaderFooterAdapter` has an `events` property where you can subscribe for events coming to your custom view instance of header/footer.
@@ -227,3 +255,6 @@ The list of events is the same of a classic `UITableView` so please refer to the
 | `endDisplay` 	|
 | `willDisplay` 	|
 
+
+- [< Back to Index](../README.md)
+- [< Back to Top](#index)
