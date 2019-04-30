@@ -132,7 +132,7 @@ director?.registerAdapter(contactAdapter)
 
 ### Available Events
 
-All events will receive at least one parameter called context, which is an instance of `Event` class with the following properties:
+All events will receive at least one parameter called context, which is an instance of `TableCellAdapter.Event` class with the following properties:
 
 - `indexPath` (`IndexPath`): Source index path (if available).
 - `element` (type-safe instance of the registered adapter's model): the instance of the model involved into the action (if available).
