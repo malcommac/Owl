@@ -271,6 +271,7 @@ open class TableDirector: NSObject {
 		guard index < sections.count else {
 			return nil
 		}
+        sections[index].removeAll() // used to fill temporary cache if needed
         let removedSection = sections.remove(at: index)
         removedSection.director = nil
         return removedSection
@@ -287,6 +288,7 @@ open class TableDirector: NSObject {
 		var removed = [TableSection]()
 		indexes.reversed().forEach {
 			if $0 < sections.count {
+                sections[$0].removeAll() // used to fill temporary cache if needed
 				removed.append(sections.remove(at: $0))
 			}
 		}
@@ -302,8 +304,13 @@ open class TableDirector: NSObject {
 	@discardableResult
 	public func removeAll(keepingCapacity: Bool = false) -> [TableSection] {
 		let removedSections = sections
-		sections.removeAll(keepingCapacity: keepingCapacity)
-        removedSections.forEach { $0.director = nil }
+        
+        for removedSection in removedSections.enumerated() { // used to fill temporary cache if needed
+            removedSection.element.removeAll()
+            removedSection.element.director = nil
+        }
+		
+        sections.removeAll(keepingCapacity: keepingCapacity)
 		return removedSections
 	}
 
