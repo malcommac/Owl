@@ -93,6 +93,8 @@
 		641CDA5222789FFF00C88886 /* StagedChangeset+Sectioned.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9D522789E8F00C88886 /* StagedChangeset+Sectioned.swift */; };
 		641CDA5322789FFF00C88886 /* UICollectionView+Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9D422789E8F00C88886 /* UICollectionView+Support.swift */; };
 		641CDA5422789FFF00C88886 /* UITableView+Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9D122789E8F00C88886 /* UITableView+Support.swift */; };
+		6478952D227F5091005F983F /* Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6478952C227F5091005F983F /* Extras.swift */; };
+		6478952E227F5099005F983F /* Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6478952C227F5091005F983F /* Extras.swift */; };
 		8933C7901EB5B82D000D00A4 /* OwlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8933C7891EB5B82A000D00A4 /* OwlTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -168,6 +170,7 @@
 		641CDA3222789FD100C88886 /* DataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSet.swift; sourceTree = "<group>"; };
 		641CDA3322789FD100C88886 /* UIImageView+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extras.swift"; sourceTree = "<group>"; };
 		641CDA3422789FD200C88886 /* Commons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Commons.swift; sourceTree = "<group>"; };
+		6478952C227F5091005F983F /* Extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extras.swift; sourceTree = "<group>"; };
 		8933C7891EB5B82A000D00A4 /* OwlTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OwlTests.swift; sourceTree = "<group>"; };
 		AD2FAA261CD0B6D800659CF4 /* Owl.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Owl.plist; sourceTree = "<group>"; };
 		AD2FAA281CD0B6E100659CF4 /* OwlTests.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = OwlTests.plist; sourceTree = "<group>"; };
@@ -329,6 +332,7 @@
 				641CD9E122789E9C00C88886 /* ElementRepresentable.swift */,
 				641CD9DF22789E9B00C88886 /* ReusableCellViewProtocol.swift */,
 				641CD9E022789E9C00C88886 /* ScrollViewEventsHandler.swift */,
+				6478952C227F5091005F983F /* Extras.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -667,6 +671,7 @@
 				641CD9AE22789E2B00C88886 /* TableCellAdapterProtocol.swift in Sources */,
 				641CD9DD22789E8F00C88886 /* ElementPath.swift in Sources */,
 				641CD9BF22789E5100C88886 /* FlowCollectionDirector.swift in Sources */,
+				6478952D227F5091005F983F /* Extras.swift in Sources */,
 				641CD9CE22789E7C00C88886 /* CollectionCellAdapter.swift in Sources */,
 				641CD9E422789E9C00C88886 /* ElementRepresentable.swift in Sources */,
 				641CD9D822789E8F00C88886 /* UITableView+Support.swift in Sources */,
@@ -693,6 +698,7 @@
 				641CDA0C22789F6900C88886 /* ContactCompanyCell.swift in Sources */,
 				641CD9FE22789F3900C88886 /* CatalogViewController.swift in Sources */,
 				641CDA3F22789FFF00C88886 /* TableCellAdapterProtocol.swift in Sources */,
+				6478952E227F5099005F983F /* Extras.swift in Sources */,
 				641CDA5022789FFF00C88886 /* ElementPath.swift in Sources */,
 				641CDA1E22789F7400C88886 /* GroupFooterView.swift in Sources */,
 				641CDA4B22789FFF00C88886 /* ElementRepresentable.swift in Sources */,

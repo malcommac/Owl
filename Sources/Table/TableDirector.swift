@@ -28,7 +28,19 @@ open class TableDirector: NSObject {
     /// Registered adapters for header/footers.
     private var headerFooterAdapters = [String: TableHeaderFooterAdapterProtocol]()
     
+    /// Cached items. Used to provide an object feedback on `...didEnd` events of the cells.
+    /// Elements are removed after the event is dispatched.
     private var cachedItems = [IndexPath: ElementRepresentable]()
+    
+    /// Is in reload session operation.
+    private var isInReloadSession: Bool = false
+    
+    @discardableResult
+    internal func storeInReloadSessionCache(_ element: ElementRepresentable, at indexPath: IndexPath?) -> Bool {
+        guard isInReloadSession, let indexPath = indexPath else { return false }
+        cachedItems[indexPath] = element
+        return true
+    }
     
 	// MARK: - Public Properties -
 
@@ -352,6 +364,7 @@ open class TableDirector: NSObject {
 	// MARK: - Reload Contents -
 	
 	/// Request for table contents reload.
+    /// This call must executed in the main thread in order to avoid weird stuff.
 	///
 	/// - Parameters:
 	///   - update: this callback can be used to perform changes in your table's data (both from
@@ -369,7 +382,9 @@ open class TableDirector: NSObject {
 			return
 		}
 		
-		let oldSections = self.sections.map { $0.copy() }
+        isInReloadSession = true
+		
+        let oldSections = self.sections.map { $0.copy() }
 		let rowAnimation = update(self)
 		let changeset = StagedChangeset(source: oldSections, target: sections)
 		
@@ -378,6 +393,8 @@ open class TableDirector: NSObject {
 		}, setData: { collection in
 			sections = collection
 		})
+        
+        isInReloadSession = false
 	}
 	
 	// MARK: - Private Functions -
@@ -393,6 +410,22 @@ open class TableDirector: NSObject {
 		}
 		return (modelInstance, adapter)
 	}
+    
+    /// Cached context return temporary cached element to provide rationalle values for didEnd events which works with removed elements.
+    ///
+    /// - Parameters:
+    ///   - path: path of the element.
+    ///   - removeFromCache: `true` to remove element cache after request. By default is `true`.
+    /// - Returns: cached element and adapter if any.
+    internal func cachedContext(forItemAt path: IndexPath, removeFromCache: Bool = true) -> (model: ElementRepresentable, adapter: TableCellAdapterProtocol)? {
+        guard let modelInstance = cachedItems[path], let adapter = self.cellAdapters[modelInstance.modelClassIdentifier]  else {
+            return nil
+        }
+        if removeFromCache {
+            cachedItems.removeValue(forKey: path)
+        }
+        return (modelInstance, adapter)
+    }
 
 	internal func adapterForCell(_ cell: UITableViewCell) -> TableCellAdapterProtocol? {
 		return cellAdapters.first(where: { item in
@@ -626,8 +659,9 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 
 	public func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
 		guard let indexPath = indexPath else { return }
-		let (model, adapter) = context(forItemAt: indexPath)
-		adapter.dispatchEvent(.didEndEdit, model: model, cell: nil, path: indexPath, params: nil)
+        if let (model, adapter) = cachedContext(forItemAt: indexPath, removeFromCache: true) {
+            adapter.dispatchEvent(.didEndEdit, model: model, cell: nil, path: indexPath, params: nil)
+        }
 	}
 
 	public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {

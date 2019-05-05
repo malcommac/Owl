@@ -19,6 +19,12 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
     /// Parent director. Section cannot be used in more of than one director.
     internal weak var director: TableDirector?
     
+    /// Return the index of the section into the parent director.
+    public var index: Int? {
+        guard let director = director else { return nil }
+        return director.sections.firstIndex(of: self)
+    }
+    
 	/// Identifier of the section
 	public let identifier: String
 
@@ -185,9 +191,11 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 	/// - Parameter index: index to remove.
 	/// - Returns: removed model, `nil` if index is invalid.
 	@discardableResult
-	public func remove(at index: Int) -> ElementRepresentable? {
-		guard index < allElements.count else { return nil }
-		return allElements.remove(at: index)
+	public func remove(at rowIndex: Int) -> ElementRepresentable? {
+		guard rowIndex < allElements.count else { return nil }
+		let removedElement = allElements.remove(at: rowIndex)
+        director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: rowIndex))
+        return removedElement
 	}
 
 	/// Remove elements at given indexes set.
@@ -199,7 +207,9 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 		var removed: [ElementRepresentable] = []
 		indexes.reversed().forEach {
 			if $0 < allElements.count {
-				removed.append(allElements.remove(at: $0))
+                let removedElement = allElements.remove(at: $0)
+                director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: $0))
+				removed.append(removedElement)
 			}
 		}
 		return removed
@@ -212,7 +222,13 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 	@discardableResult
 	public func removeAll(keepingCapacity kp: Bool = false) -> Int {
 		let count = allElements.count
+        let removedElements = allElements
 		allElements.removeAll(keepingCapacity: kp)
+        
+        for item in removedElements.enumerated() {
+            director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
+        }
+        
 		return count
 	}
 

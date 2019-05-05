@@ -67,8 +67,11 @@ class CatalogViewController: UIViewController {
         
         catalogAdapter.events.commitEdit = { [weak self] ctx, style in
             guard let indexPath = ctx.indexPath else { return }
+            self?.tableDirector?.reload(afterUpdate: { dir in
+                dir.sections[indexPath.section].remove(at: indexPath.row)
+                return UITableView.RowAnimation.none
+            }, completion: nil)
             self?.tableDirector?.sections[indexPath.section].remove(at: indexPath.row)
-            self?.tableDirector?.reload()
         }
 	}
 
