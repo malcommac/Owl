@@ -33,7 +33,15 @@ open class TableDirector: NSObject {
     private var cachedItems = [IndexPath: ElementRepresentable]()
     
     /// Is in reload session operation.
-    private var isInReloadSession: Bool = false
+    private var isInReloadSession: Bool = false {
+        didSet {
+            if isInReloadSession == false {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
+                    self.cachedItems.removeAll()
+                }
+            }
+        }
+    }
     
     @discardableResult
     internal func storeInReloadSessionCache(_ element: ElementRepresentable, at indexPath: IndexPath?) -> Bool {
