@@ -410,6 +410,12 @@ open class TableDirector: NSObject {
 		})
         
         isInReloadSession = false
+        
+        if let completion = completion {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                completion()
+            }
+        }
 	}
 	
 	// MARK: - Private Functions -

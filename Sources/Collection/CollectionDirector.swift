@@ -277,6 +277,12 @@ open class CollectionDirector: NSObject,
 		collection?.reload(using: changeset, setData: {
 			self.sections = $0
 		})
+        
+        if let completion = completion {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                completion()
+            }
+        }
 	}
 
 	// MARK: - Private Methods -
