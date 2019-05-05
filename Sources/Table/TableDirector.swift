@@ -28,6 +28,8 @@ open class TableDirector: NSObject {
     /// Registered adapters for header/footers.
     private var headerFooterAdapters = [String: TableHeaderFooterAdapterProtocol]()
     
+    private var cachedItems = [IndexPath: ElementRepresentable]()
+    
 	// MARK: - Public Properties -
 
 	/// Managed `UITableView` instance, not retained.
@@ -174,6 +176,7 @@ open class TableDirector: NSObject {
 	/// - Parameter sections: s
 	public func set(sections: [TableSection]) {
 		self.sections = sections
+        sections.forEach { $0.director = self }
 	}
 	
 	/// Append a new section at the specified index of the table.
@@ -184,6 +187,7 @@ open class TableDirector: NSObject {
 	///   - section: section to append.
 	///   - index: destination index, `nil` to append section at the bottom of the table.
 	public func add(section: TableSection, at index: Int? = nil) {
+        section.director = self
 		guard let index = index, index < sections.count else {
 			sections.append(section)
 			return
@@ -198,6 +202,7 @@ open class TableDirector: NSObject {
 	///   - newSections: sections to append.
 	///   - index: destination index, `nil` to append sections at the botton of the table.
 	public func add(sections newSections: [TableSection], at index: Int? = nil) {
+        newSections.forEach { $0.director = self }
 		guard let index = index, index < sections.count else {
 			sections.append(contentsOf: newSections)
 			return
@@ -254,7 +259,9 @@ open class TableDirector: NSObject {
 		guard index < sections.count else {
 			return nil
 		}
-        return sections.remove(at: index)
+        let removedSection = sections.remove(at: index)
+        removedSection.director = nil
+        return removedSection
 	}
 
 	/// Remove sections at specified indexes.
@@ -271,6 +278,7 @@ open class TableDirector: NSObject {
 				removed.append(sections.remove(at: $0))
 			}
 		}
+        removed.forEach { $0.director = nil }
 		return removed
 	}
 
@@ -283,6 +291,7 @@ open class TableDirector: NSObject {
 	public func removeAll(keepingCapacity: Bool = false) -> [TableSection] {
 		let removedSections = sections
 		sections.removeAll(keepingCapacity: keepingCapacity)
+        removedSections.forEach { $0.director = nil }
 		return removedSections
 	}
 
@@ -331,8 +340,8 @@ open class TableDirector: NSObject {
 	public func add(elements: [ElementRepresentable], inSection sectionIdx: Int? = nil) -> TableSection {
 		guard let sectionIdx = sectionIdx, sectionIdx < sections.count else {
 			let newSection = TableSection(elements: elements)
-			sections.append(newSection)
-			return newSection
+            self.add(section: newSection)
+            return newSection
 		}
 		
 		let destinationSection = sections[sectionIdx]

@@ -52,6 +52,24 @@ class CatalogViewController: UIViewController {
 			self.selectCatalogItem(ctx.element)
 			return .deselectAnimated
 		}
+        
+        catalogAdapter.events.editStyle = { ctx in
+            return .delete
+        }
+        
+        catalogAdapter.events.canEditRow = { ctx in
+            return true
+        }
+        
+        catalogAdapter.events.deleteConfirmTitle = { ctx in
+            return "Delete"
+        }
+        
+        catalogAdapter.events.commitEdit = { [weak self] ctx, style in
+            guard let indexPath = ctx.indexPath else { return }
+            self?.tableDirector?.sections[indexPath.section].remove(at: indexPath.row)
+            self?.tableDirector?.reload()
+        }
 	}
 
 	// MARK: - Prepare Contents -
