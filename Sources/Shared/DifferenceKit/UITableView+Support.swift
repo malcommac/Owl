@@ -79,9 +79,7 @@ internal extension UITableView {
 			setData(data)
 			return reloadData()
 		}
-		
-		print(stagedChangeset.count)
-		
+				
 		for changeset in stagedChangeset {
 			if let interrupt = interrupt, interrupt(changeset), let data = stagedChangeset.last?.data {
 				setData(data)

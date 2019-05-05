@@ -71,7 +71,6 @@ class CatalogViewController: UIViewController {
                 dir.sections[indexPath.section].remove(at: indexPath.row)
                 return UITableView.RowAnimation.none
             }, completion: nil)
-            self?.tableDirector?.sections[indexPath.section].remove(at: indexPath.row)
         }
 	}
 

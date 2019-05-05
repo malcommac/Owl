@@ -674,7 +674,7 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 
 	public func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
 		guard let indexPath = indexPath else { return }
-        if let (model, adapter) = cachedContext(forItemAt: indexPath, removeFromCache: true) {
+        if let (model, adapter) = cachedContext(forItemAt: indexPath, removeFromCache: false) {
             adapter.dispatchEvent(.didEndEdit, model: model, cell: nil, path: indexPath, params: nil)
         }
 	}
@@ -700,7 +700,8 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 	}
 
 	public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let _ = adapterForCell(cell)?.dispatchEvent(.endDisplay, model: nil, cell: cell, path: indexPath, params: nil)
+        let result = cachedContext(forItemAt: indexPath, removeFromCache: false)
+        let _ = adapterForCell(cell)?.dispatchEvent(.endDisplay, model: result?.model, cell: cell, path: indexPath, params: nil)
 	}
 
 	public func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
