@@ -212,6 +212,28 @@ At anytime you are able to add new sections, move or replace items just by using
 
 Refresh is made without animation, but Owl is also able to refresh the content of your data by picking the best animation based on a blazing fast diff algorithm which compare the data before/after your changes. More details in the next chapter. 
 
+The following code demostrate how to add swipe to delete functionality to an adapter:
+
+```swift
+catalogAdapter.events.canEditRow = { ctx in
+  return true
+}
+        
+catalogAdapter.events.deleteConfirmTitle = { ctx in
+  return "Delete"
+}
+        
+catalogAdapter.events.commitEdit = { [weak self] ctx, style in
+  guard let indexPath = ctx.indexPath else { return }
+  
+  // By using the session to reload you will also receive events like didEndEditingCell
+  self?.tableDirector?.reload(afterUpdate: { dir in
+    dir.sections[indexPath.section].remove(at: indexPath.row)
+    return .none
+  }, completion: nil)
+}
+```
+
 <a name="3"/>
 
 ### How-To
