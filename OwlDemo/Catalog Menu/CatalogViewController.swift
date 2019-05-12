@@ -83,7 +83,9 @@ class CatalogViewController: UIViewController {
 		let demo2 = CatalogItem(id: "demo2", icon: "collectionView".image, title: "Contacts")
 		demo2.shortDesc = ""
         
-        tableDirector?.add(elements: [demo1,demo2])
+        let section = tableDirector?.add(elements: [demo1,demo2])
+        // only section with a non nil indexTitle will become part of the list. click to jump is made automatically.
+        section?.indexTitle = "A"
 		tableDirector?.reload()
 	}
 
