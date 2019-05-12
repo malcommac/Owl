@@ -67,7 +67,7 @@ let contactAdapter = TableCellAdapter<Contact,ContactCell> { dr in
 }
 // Since now our table can show Contact istances using ContactCell
 // All events are received only in its adapter.
-director?.registerCellAdapter(singleItem) 
+director?.registerCellAdapter(contactAdapter) 
 
 /// Manage your content in a declarative way!
 let friendsSection = TableSection(elements: [john,mark,anita])
