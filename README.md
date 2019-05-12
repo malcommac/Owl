@@ -35,7 +35,9 @@ Owl was created and maintaned by [Daniele Margutti](https://github.com/malcommac
 
 The preferred installation method is with CocoaPods. Add the following to your Podfile:
 
-`pod 'OwlKit', '~> 1.0'`
+```ruby
+pod 'OwlKit', '~> 1.0
+```
 
 ## What you will get
 

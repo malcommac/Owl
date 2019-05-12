@@ -31,6 +31,28 @@ open class CollectionDirector: NSObject,
 
 	/// Registered footer identifiers
 	internal var footerReuseIDs = Set<String>()
+    
+    /// Cached items. Used to provide an object feedback on `...didEnd` events of the cells.
+    /// Elements are removed after the event is dispatched.
+    private var cachedItems = [IndexPath: ElementRepresentable]()
+    
+    /// Is in reload session operation.
+    private var isInReloadSession: Bool = false {
+        didSet {
+            if isInReloadSession == false {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
+                    self.cachedItems.removeAll()
+                }
+            }
+        }
+    }
+    
+    @discardableResult
+    internal func storeInReloadSessionCache(_ element: ElementRepresentable, at indexPath: IndexPath?) -> Bool {
+        guard isInReloadSession, let indexPath = indexPath else { return false }
+        cachedItems[indexPath] = element
+        return true
+    }
 
 	//MARK: - Public Properties -
 
@@ -39,6 +61,7 @@ open class CollectionDirector: NSObject,
 
 	/// Sections of the collection
 	public private(set) var sections = [CollectionSection]()
+    
     
     /// Return first section.
     public var firstSection: CollectionSection? {
@@ -164,6 +187,7 @@ open class CollectionDirector: NSObject,
 	/// - Parameter models: array of models to set.
 	public func set(sections newSections: [CollectionSection]) {
 		sections = newSections
+        sections.forEach { $0.director = self }
 	}
     
     /// Return section with given unique identifier.
@@ -181,6 +205,7 @@ open class CollectionDirector: NSObject,
 	@discardableResult
 	public func add(elements: [ElementRepresentable]) -> CollectionSection {
 		let section = CollectionSection(elements: elements)
+        section.director = self
 		sections.append(section)
 		return section
 	}
@@ -191,6 +216,7 @@ open class CollectionDirector: NSObject,
 	///   - section: section to insert.
 	///   - index: destination index; if `nil` it will be append at the end of the list.
 	public func add(section: CollectionSection, at index: Int? = nil) {
+        section.director = self
 		guard let index = index, index < sections.count else {
 			sections.append(section)
 			return
@@ -204,6 +230,7 @@ open class CollectionDirector: NSObject,
 	///   - sections: sections to append
 	///   - index: destination index; if `nil` it will be append at the end of the list.
 	public func add(sections newSections: [CollectionSection], at index: Int? = nil) {
+        newSections.forEach { $0.director = self }
 		guard let i = index, i < sections.count else {
 			sections.append(contentsOf: newSections)
 			return
@@ -217,6 +244,13 @@ open class CollectionDirector: NSObject,
 	@discardableResult
 	public func removeAll(keepingCapacity kp: Bool = false) -> Int {
 		let count = sections.count
+        let removedSections = sections
+        
+        for removedSection in removedSections.enumerated() { // used to fill temporary cache if needed
+            removedSection.element.removeAll()
+            removedSection.element.director = nil
+        }
+        
 		sections.removeAll(keepingCapacity: kp)
 		return count
 	}
@@ -231,7 +265,9 @@ open class CollectionDirector: NSObject,
 		guard index < sections.count else {
 			return nil
 		}
-		return sections.remove(at: index)
+        let removedSection = sections.remove(at: index)
+        removedSection.director = nil
+		return removedSection
 	}
 
 	/// Remove sections at given indexes.
@@ -247,6 +283,7 @@ open class CollectionDirector: NSObject,
 				removed.append(sections.remove(at: $0))
 			}
 		}
+        removed.forEach { $0.director = nil }
 		return removed
 	}
 
@@ -269,6 +306,8 @@ open class CollectionDirector: NSObject,
 			collection?.reloadData()
 			return
 		}
+        
+        isInReloadSession = true
 		
 		let oldSections = self.sections.map { $0.copy() }
 		update(self)
@@ -278,6 +317,13 @@ open class CollectionDirector: NSObject,
 			self.sections = $0
 		})
         
+        if let completion = completion {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                completion()
+            }
+        }
+        
+        isInReloadSession = false
         if let completion = completion {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 completion()
@@ -295,6 +341,22 @@ open class CollectionDirector: NSObject,
 		return (modelInstance, adapter)
 	}
 
+    /// Cached context return temporary cached element to provide rationalle values for didEnd events which works with removed elements.
+    ///
+    /// - Parameters:
+    ///   - path: path of the element.
+    ///   - removeFromCache: `true` to remove element cache after request. By default is `true`.
+    /// - Returns: cached element and adapter if any.
+    internal func cachedContext(forItemAt path: IndexPath, removeFromCache: Bool = true) -> (model: ElementRepresentable, adapter: CollectionCellAdapterProtocol)? {
+        guard let modelInstance = cachedItems[path], let adapter = self.cellAdapters[modelInstance.modelClassIdentifier]  else {
+            return nil
+        }
+        if removeFromCache {
+            cachedItems.removeValue(forKey: path)
+        }
+        return (modelInstance, adapter)
+    }
+    
 }
 
 public extension CollectionDirector {
@@ -320,7 +382,8 @@ public extension CollectionDirector {
 	}
 
 	func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-		// TODO
+        let result = cachedContext(forItemAt: indexPath, removeFromCache: false)
+        let _ = adapterForCell(cell)?.dispatchEvent(.endDisplay, model: result?.model, cell: cell, path: indexPath, params: nil)
 	}
 
 	// MARK: - Select -
@@ -436,8 +499,10 @@ public extension CollectionDirector {
 
 	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let adapter = adapterForHeaderFooter(kind, indexPath: indexPath)
-        return adapter?.dequeueHeaderFooterForDirector(self, type: kind, indexPath: indexPath) ?? UICollectionReusableView()
-	}
+        let view = adapter?.dequeueHeaderFooterForDirector(self, type: kind, indexPath: indexPath) ?? UICollectionReusableView()
+        let _ = adapter?.dispatch(.dequeue, isHeader: (kind == UICollectionView.elementKindSectionHeader), view: view, section: sections[indexPath.section], index: indexPath.section)
+        return view
+    }
 
 	func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
         let adapter = adapterForHeaderFooter(elementKind, indexPath: indexPath)
@@ -493,6 +558,12 @@ public extension CollectionDirector {
 		}
 		return Array(result.values)
 	}
+    
+    internal func adapterForCell(_ cell: UICollectionViewCell) -> CollectionCellAdapterProtocol? {
+        return cellAdapters.first(where: { item in
+            return item.value.modelCellType == type(of: cell)
+        })?.value
+    }
 
 	// MARK: - ScrollView Delegate -
 

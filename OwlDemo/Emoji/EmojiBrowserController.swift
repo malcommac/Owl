@@ -44,6 +44,9 @@ public class EmojiBrowserController: UIViewController {
 			cfg.events.dequeue = { ctx in
 				ctx.view?.titleLabel.text = ctx.section?.identifier ?? "-"
 			}
+            cfg.events.referenceSize = { ctx in
+                return CGSize(width: self.collection.frame.size.width, height: 22)
+            }
 		}
         director?.registerHeaderFooterAdapter(headerAdapter)
         
