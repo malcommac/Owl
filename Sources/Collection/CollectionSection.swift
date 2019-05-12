@@ -15,6 +15,15 @@ import UIKit
 /// Represent a single section of the collection.
 open class CollectionSection: Equatable, Copying, DifferentiableSection {
 
+    /// Parent director. Section cannot be used in more of than one director.
+    internal weak var director: CollectionDirector?
+    
+    /// Return the index of the section into the parent director.
+    public var index: Int? {
+        guard let director = director else { return nil }
+        return director.sections.firstIndex(of: self)
+    }
+    
 	// MARK: - Public Properties -
 
 	/// Identifier of the section
@@ -109,7 +118,12 @@ open class CollectionSection: Equatable, Copying, DifferentiableSection {
 	// MARK: - Content Managegment -
 	
 	public func set(elements newElements: [ElementRepresentable]) {
+        let removedElements = elements
 		elements = newElements
+        
+        for item in removedElements.enumerated() {
+            director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
+        }
 	}
 	
 	/// Replace a model instance at specified index.
@@ -159,9 +173,11 @@ open class CollectionSection: Equatable, Copying, DifferentiableSection {
 	/// - Parameter index: index to remove.
 	/// - Returns: removed model, `nil` if index is invalid.
 	@discardableResult
-	public func remove(at index: Int) -> ElementRepresentable? {
-		guard index < elements.count else { return nil }
-		return elements.remove(at: index)
+	public func remove(at rowIndex: Int) -> ElementRepresentable? {
+		guard rowIndex < elements.count else { return nil }
+		let removedElement = elements.remove(at: rowIndex)
+        director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: rowIndex))
+        return removedElement
 	}
 	
 	/// Remove model at given indexes set.
@@ -173,7 +189,9 @@ open class CollectionSection: Equatable, Copying, DifferentiableSection {
 		var removed: [ElementRepresentable] = []
 		indexes.reversed().forEach {
 			if $0 < elements.count {
-				removed.append(elements.remove(at: $0))
+                let removedElement = elements.remove(at: $0)
+                director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: $0))
+                removed.append(removedElement)
 			}
 		}
 		return removed
@@ -186,7 +204,13 @@ open class CollectionSection: Equatable, Copying, DifferentiableSection {
 	@discardableResult
 	public func removeAll(keepingCapacity kp: Bool = false) -> Int {
 		let count = elements.count
+        let removedElements = elements
 		elements.removeAll(keepingCapacity: kp)
+        
+        for item in removedElements.enumerated() {
+            director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
+        }
+        
 		return count
 	}
 	
