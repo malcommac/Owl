@@ -436,8 +436,24 @@ public extension CollectionDirector {
 
 	func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let adapter = adapterForHeaderFooter(kind, indexPath: indexPath)
-        return adapter?.dequeueHeaderFooterForDirector(self, type: kind, indexPath: indexPath) ?? UICollectionReusableView()
-	}
+        let view = adapter?.dequeueHeaderFooterForDirector(self, type: kind, indexPath: indexPath) ?? UICollectionReusableView()
+        let _ = adapter?.dispatch(.dequeue, isHeader: (kind == UICollectionView.elementKindSectionHeader), view: view, section: sections[indexPath.section], index: indexPath.section)
+        return view
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard let size = sections[section].headerView?.dispatch(.referenceSize, isHeader: true, view: nil, section: sections[section], index: section) as? CGSize else {
+            return .zero
+        }
+        return size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard let size = sections[section].footerView?.dispatch(.referenceSize, isHeader: false, view: nil, section: sections[section], index: section) as? CGSize else {
+            return .zero
+        }
+        return size
+    }
 
 	func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
         let adapter = adapterForHeaderFooter(elementKind, indexPath: indexPath)
