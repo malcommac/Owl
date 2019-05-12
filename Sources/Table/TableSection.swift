@@ -141,7 +141,12 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
     ///
     /// - Parameter newElements: new elements.
 	public func set(elements newElements: [ElementRepresentable]) {
+        let removedElements = allElements
 		allElements = newElements
+        
+        for item in removedElements.enumerated() {
+            director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
+        }
 	}
 
 	/// Replace a model instance at specified index.
