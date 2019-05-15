@@ -121,11 +121,13 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 		self.identifier = id ?? UUID().uuidString
 	}
     
-    public convenience init(id: String? = nil, elements: [ElementRepresentable] = [],
-                            header: TableHeaderFooterAdapterProtocol, footer: TableHeaderFooterAdapterProtocol) {
+    public convenience init(id: String? = nil,
+                            elements: [ElementRepresentable] = [],
+                            headerView: TableHeaderFooterAdapterProtocol?,
+                            footerView: TableHeaderFooterAdapterProtocol?) {
         self.init(id: id, elements: elements)
-        self.headerView = header
-        self.footerView = footer
+        self.headerView = headerView
+        self.footerView = footerView
     }
 
 	public convenience init(id: String? = nil, elements: [ElementRepresentable] = [],

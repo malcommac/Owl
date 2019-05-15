@@ -27,6 +27,16 @@ public class ContactsController: UIViewController {
         
         director = TableDirector(table: table)
         
+        let header = TableHeaderFooterAdapter<GroupHeaderView> { config in
+            config.events.dequeue = { ctx in
+                ctx.view?.headerTitleLabel?.text = "..."
+                ctx.view?.headerSubtitleLabel?.text = "Section #\(ctx.section)"
+            }
+            config.events.height = { _ in
+                return 30
+            }
+        }
+        
         let singleItem = TableCellAdapter<ContactSingle,ContactSingleCell> { dr in
             dr.events.dequeue = { ctx in
                 ctx.cell?.item = ctx.element
@@ -45,7 +55,8 @@ public class ContactsController: UIViewController {
         }
         director?.registerCellAdapter(companyItem)
 
-        director?.add(elements: self.elements)
+        let section = TableSection(elements: self.elements, headerView: header, footerView: nil)
+        director?.add(section: section)
         director?.reload()
     }
     

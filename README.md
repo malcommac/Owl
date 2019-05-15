@@ -96,6 +96,7 @@ director?.reload()
 	- [3.4 - Loading Cells from Storyboard, Xib or class](#3.4)
 	- [3.5 - Custom Section's Header/Footer (String/View based)](#3.5)
 	- [3.6 - Reload data with automatic animations](#3.6)
+	- [3.7 - Working with Headers & Footers](#3.7)
 - 4 - [APIs Doc: Manage `UITableView`](./Documentation/Manage_Tables.md)
 - 5 - [APIs Doc: Manage `UICollectionView`](./Documentation/Manage_Collections.md)
 - 6 - [Listen for `UIScrollViewDelegate` events](./Documentation/Manage_UIScrollViewDelegate_Events.md)
@@ -451,3 +452,105 @@ Compared to IGListKit it allows:
 |IGListKit    |❌    |❌     |❌  |❌    |
 
 Moreover it way faster than [IGListKit](https://github.com/Instagram/IGListKit) and [RxDataSources](https://github.com/RxSwiftCommunity/RxDataSources) counterparts!
+
+<a name="3.7"/>
+
+#### 3.7 - Working with Headers & Footers
+
+Headers and Footers in Owl are managed in the same way already used for Cells, using Adapter; however due to its nature (instead of cells they are not strictly correlated to a specific model class) you will create an adapter which links just the view used to render it (subclass of `UITableViewHeaderFooterView` for `UITableView` and subclass of `UICollectionReusableView` for `UICollectionView`).
+
+**A. Creating Header/Footer for UITableView**
+
+Using header/footer in your `UITableView` via storyboard is not easy; the most affordable way is to create a xib file with the same name of your `UITableViewHeaderFooterView` subclass.
+
+Suppose you want to make an header/footer class called `GroupHeaderView` for your Contacts table. You will need to create:
+
+`GroupHeaderView.xib` file which contains the UI of the class (you can still customize how the view is loaded by overriding the `ReusableCellViewProtocol` protocol in your `GroupHeaderView.swift` implementation. By default it expect a separate xib file with UI but you can also load it directly from class or provide a different filename). This xib file contains a single `GroupHeaderView` view subclass.
+
+![](./Documentation/header_footer.png)
+
+`GroupHeaderView .swift` file with your class implementation.
+In a standard configuration you don't need to make anything special to use. `UITableViewHeaderFooterView` has already its own default implementation for `ReusableCellViewProtocol`.
+
+```swift
+import UIKit
+
+// Nothing special is required to support header/footer class in Owl.
+// This is just a simple class.
+
+public class GroupHeaderView: UITableViewHeaderFooterView {
+	@IBOutlet public var headerTitleLabel: UILabel?
+	@IBOutlet public var headerSubtitleLabel: UILabel?
+	...
+}
+```
+
+The next step is to register your header/footer adapter:
+
+```swift
+let groupHeaderAdapter = TableHeaderFooterAdapter<GroupHeaderView> { config in
+
+  // Configure content of the header/footer
+  config.events.dequeue = { ctx in
+    ctx.view?.headerTitleLabel?.text = "..."
+    ctx.view?.headerSubtitleLabel?.text = "Section #\(ctx.section)"
+  }
+   
+  // Configure height of the header/footer
+  config.events.height = { _ in
+    return 30
+  }
+}
+```
+
+At this point you can assign this adapter to any `TableSection` instance just by using:
+
+```swift
+let newSection = TableSection(elements: [...], headerView: groupHeaderAdapter, footerView: nil)
+director?.add(section: section)
+director?.reload()
+```
+
+That's all! You can reuse `groupHeaderAdapter` in more than a section without problem.
+
+**B. Creating Header/Footer for UICollectionView**
+
+Creating header/footer for collection views is pretty similar to the approach already used for table; the only big difference is you can use header/footer specified in collectionview (as like for cells) when you are using storyboards.
+
+First of all you need to make your class of the header/footer. The following example create a custom header which is a `EmojiHeaderView.swift`:
+
+```swift
+import UIKit
+
+public class EmojiHeaderView: UICollectionReusableView {
+    @IBOutlet public var titleLabel: UILabel!
+    // ...
+}
+```
+
+As for table's header/footer view you don't need to make anything special for your subclass.
+
+The next step is to enable header/footer for your collection view and set the newly generated view as subclass of your view class.
+
+![](./Documentation/header_footer_coolectionviews.png)
+
+You are now ready to create the adapter to hold your header/footer:
+
+```swift
+let headerAdapter = CollectionHeaderFooterAdapter<EmojiHeaderView> { cfg in
+  // dequeue
+  cfg.events.dequeue = { ctx in
+    ctx.view?.titleLabel.text = ctx.section?.identifier ?? "-"
+  }
+}
+
+director?.registerHeaderFooterAdapter(headerAdapter)
+```
+
+You can now assign your header/footer adapter to one or more section instances:
+
+```swift
+let section = CollectionSection(id: "Section \(idx)", elements: rawSection)
+section.headerView = headerAdapter
+section.headerSize = CGSize(width: self.collection.frame.size.width, height: 30)
+```
