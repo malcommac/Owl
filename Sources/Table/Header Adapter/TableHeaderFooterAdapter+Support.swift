@@ -20,13 +20,13 @@ public extension TableHeaderFooterAdapter {
     struct HeaderFooterEvent {
         
         // `true` if event is related to an header, `false` if related to a footer.
-        let isHeader: Bool
+        public let isHeader: Bool
         
         // Header/footer view instance class.
-        private(set) var view: View?
+        public private(set) var view: View?
         
         // Header/footer section index.
-        private(set) var section: Int
+        public private(set) var section: Int
         
         internal init(header: Bool, view: UIView?, at section: Int) {
             self.isHeader = header
