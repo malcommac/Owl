@@ -264,7 +264,7 @@ open class TableDirector: NSObject {
 			indexPath.row < sections[indexPath.section].elements.count else {
 				return nil
 		}
-		return sections[indexPath.section].elements[indexPath.section]
+		return sections[indexPath.section].elements[indexPath.row]
 	}
 	
 	// MARK: - Remove Sections -
