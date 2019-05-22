@@ -179,7 +179,7 @@ open class CollectionDirector: NSObject,
 			indexPath.row < sections[indexPath.section].elements.count else {
 			return nil
 		}
-		return sections[indexPath.section].elements[indexPath.section]
+		return sections[indexPath.section].elements[indexPath.row]
 	}
 
 	/// Change the content of the table.
