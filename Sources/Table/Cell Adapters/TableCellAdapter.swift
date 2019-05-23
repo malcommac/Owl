@@ -14,12 +14,22 @@ import UIKit
 
 open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewProtocol>: TableCellAdapterProtocol {
 
-	// MARK: - TableAdapterProtocol Conformance -
+    // MARK: - Public Properties -
 
-	public var modelType: Any.Type = Model.self
-	public var modelCellType: Any.Type = Cell.self
-
-	// MARK: - Public Properties -
+    /// This is the model type used to dequeue the model. You should not alter it.
+    public var modelType: Any.Type = Model.self
+    
+    /// This is the cell type used to dequeue the model. You should not alter it.
+    public var modelCellType: Any.Type = Cell.self
+    
+    /// This is the reusable identifier to dequeue cell. By default is set to the same
+    /// name of the class used as `Cell` but you can override it before using the adapter itself.
+    public var cellReuseIdentifier: String
+    
+    /// This is the source used to dequeue the cell itself. By default is set to `.fromStoryboard`
+    /// and it means the cell UI is searched inside the the director's table.
+    /// You can however set it before the first dequeue is made to load it as class or from an external xib.
+    public var cellLoadSource: ReusableViewSource
 
 	/// Events you can observe from the adapter.
 	public let events = EventsSubscriber()
@@ -27,6 +37,8 @@ open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewP
 	// MARK: - Initialization -
 	
 	public init(_ configuration: ((TableCellAdapter) -> ())? = nil) {
+        self.cellReuseIdentifier = String(describing: Cell.self)
+        self.cellLoadSource = .fromStoryboard
 		configuration?(self)
 	}
 
@@ -34,22 +46,40 @@ open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewP
 
 	public func dequeueCell(inTable table: UITableView, at indexPath: IndexPath?) -> UITableViewCell {
 		guard let indexPath = indexPath else {
-			let castedCell = Cell.reusableViewClass() as! UITableViewCell.Type
+            let castedCell = modelCellType as! UITableViewCell.Type
 			let cellInstance = castedCell.init()
 			return cellInstance
 		}
-		return table.dequeueReusableCell(withIdentifier: Cell.reusableViewIdentifier(), for: indexPath)
+        return table.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
 	}
 
 	public func registerReusableCellViewForDirector(_ director: TableDirector) -> Bool {
-		let id = Cell.reusableViewIdentifier()
+        let id = cellReuseIdentifier
 		guard director.cellReuseIDs.contains(id) == false else {
 			return false
 		}
-		Cell.registerReusableView(inTable: director.table, as: .cell)
+        
+        registerReusableViewAsType(forDirector: director)
 		director.cellReuseIDs.insert(id)
 		return true
 	}
+    
+    private func registerReusableViewAsType(forDirector director: TableDirector) {
+        switch cellLoadSource {
+        case .fromStoryboard:
+            // nothing to do
+            break
+            
+        case .fromXib(let name, let bundle):
+            let srcBundle = (bundle ?? Bundle.init(for: Cell.self))
+            let srcNib = UINib(nibName: (name ?? cellReuseIdentifier), bundle: srcBundle)
+            director.table?.register(srcNib, forCellReuseIdentifier: cellReuseIdentifier)
+            
+        case .fromClass:
+            director.table?.register(Cell.self, forCellReuseIdentifier: cellReuseIdentifier)
+            
+        }
+    }
 
 	// MARK: - Supporting Functions -
 

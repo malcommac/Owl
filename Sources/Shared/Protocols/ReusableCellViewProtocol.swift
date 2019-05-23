@@ -14,13 +14,13 @@ import UIKit
 
 public protocol ReusableCellViewProtocol: class {
 
-	static func reusableViewType() -> AnyObject.Type
-	static func reusableViewClass() -> AnyClass
-	static func reusableViewIdentifier() -> String
-	static func reusableViewSource() -> ReusableViewSource
-
-	static func registerReusableView(inTable table: UITableView?, as type: ReusableViewRegistrationType)
-    static func registerReusableView(inCollection collection: UICollectionView?, as type: ReusableViewRegistrationType)
+//    static func reusableViewType() -> AnyObject.Type
+//    static func reusableViewClass() -> AnyClass
+//    static func reusableViewIdentifier() -> String
+//    static func reusableViewSource() -> ReusableViewSource
+//
+//    static func registerReusableView(inTable table: UITableView?, as type: ReusableViewRegistrationType)
+//    static func registerReusableView(inCollection collection: UICollectionView?, as type: ReusableViewRegistrationType)
 }
 
 public enum ReusableViewSource {
@@ -29,6 +29,7 @@ public enum ReusableViewSource {
     case fromClass
 }
 
+/*
 public extension ReusableCellViewProtocol {
     
     static func reusableViewClass() -> AnyClass {
@@ -39,23 +40,22 @@ public extension ReusableCellViewProtocol {
 		return reusableViewClass().self
 	}
 
-    static func reusableViewSource() -> ReusableViewSource {
-		return .fromStoryboard
-	}
+//    static func reusableViewSource() -> ReusableViewSource {
+//        return .fromStoryboard
+//    }
 
     static func reusableViewIdentifier() -> String {
 		return String(describing: reusableViewType())
 	}
 
-    static func registerReusableView(inTable table: UITableView?, as type: ReusableViewRegistrationType) {
-        
+    static func registerReusableView(inTable table: UITableView?, as registrationType: ReusableViewRegistrationType) {
         let reusableID = reusableViewIdentifier()
         let reusableClass: AnyClass = reusableViewClass()
         let reusableSource = reusableViewSource()
         
 		switch reusableSource {
 		case .fromStoryboard:
-			if type.isHeaderFooter {
+			if registrationType.isHeaderFooter {
 				fatalError("Cannot load header/footer from storyboard. Use another source (xib/class) instead.")
 			}
 			break
@@ -64,7 +64,7 @@ public extension ReusableCellViewProtocol {
 			let srcBundle = (bundle ?? Bundle.init(for: reusableClass))
 			let srcNib = UINib(nibName: (name ?? reusableID), bundle: srcBundle)
 
-			if type == .cell {
+			if registrationType == .cell {
 				table?.register(srcNib, forCellReuseIdentifier: reusableID)
 			} else {
 				table?.register(srcNib, forHeaderFooterViewReuseIdentifier: reusableID)
@@ -72,7 +72,7 @@ public extension ReusableCellViewProtocol {
 
 		case .fromClass:
 
-			if type == .cell {
+			if registrationType == .cell {
 				table?.register(reusableClass, forCellReuseIdentifier: reusableID)
 			} else {
 				table?.register(reusableClass, forHeaderFooterViewReuseIdentifier: reusableID)
@@ -120,6 +120,7 @@ public extension ReusableCellViewProtocol {
 	}
 
 }
+*/
 
 public enum ReusableViewRegistrationType {
 	case cell
@@ -136,14 +137,22 @@ public enum ReusableViewRegistrationType {
 
 
 extension UITableViewCell : ReusableCellViewProtocol {
-	public static func reusableViewClass() -> AnyClass {
-		return self
-	}
-}
-
+//    public static func reusableViewClass() -> AnyClass {
+//        return self
+//    }
+//
+////    public static func reusableViewSource() -> ReusableViewSource {
+////            return .fromStoryboard
+    }
+//}
+//
 extension UICollectionReusableView: ReusableCellViewProtocol {
-	public static func reusableViewClass() -> AnyClass {
-		return self
-	}
-}
-
+//    public static func reusableViewClass() -> AnyClass {
+//        return self
+//    }
+//
+////    public static func reusableViewSource() -> ReusableViewSource {
+////        return .fromStoryboard
+    }
+//}
+//

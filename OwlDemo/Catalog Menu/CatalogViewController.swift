@@ -39,6 +39,7 @@ class CatalogViewController: UIViewController {
 		tableDirector?.rowHeight = .explicit(60)
         
 		let catalogAdapter = TableCellAdapter<CatalogItem, CatalogItemCell>()
+        catalogAdapter.cellLoadSource = .fromXib(name: nil, bundle: nil)
 		tableDirector?.registerCellAdapter(catalogAdapter)
 
         catalogAdapter.events.rowHeight = { ctx in

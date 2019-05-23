@@ -14,34 +14,65 @@ import UIKit
 
 public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewProtocol>: CollectionCellAdapterProtocol {
 
-	// MARK: - TableAdapterProtocol Conformance -
+    // MARK: - Public Properties -
 
-	public var modelType: Any.Type = Model.self
-	public var modelCellType: Any.Type = Cell.self
-
+    /// This is the model type used to dequeue the model. You should not alter it.
+    public var modelType: Any.Type = Model.self
+    
+    /// This is the cell type used to dequeue the model. You should not alter it.
+    public var modelCellType: Any.Type = Cell.self
+    
+    /// This is the reusable identifier to dequeue cell. By default is set to the same
+    /// name of the class used as `Cell` but you can override it before using the adapter itself.
+    public var cellReuseIdentifier: String
+    
+    /// This is the source used to dequeue the cell itself. By default is set to `.fromStoryboard`
+    /// and it means the cell UI is searched inside the the director's table.
+    /// You can however set it before the first dequeue is made to load it as class or from an external xib.
+    public var cellLoadSource: ReusableViewSource
+    
 	// MARK: - Public Functions -
 
+    // Events you can register.
 	public var events = CollectionCellAdapter.EventsSubscriber()
 
 	public init(_ configuration: ((CollectionCellAdapter) -> Void)? = nil) {
+        self.cellReuseIdentifier = String(describing: Cell.self)
+        self.cellLoadSource = .fromStoryboard
 		configuration?(self)
 	}
 	
 	// MARK: - Adapter Helpers Functions -
 
 	public func dequeueCell(inCollection collection: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
-		return collection.dequeueReusableCell(withReuseIdentifier: Cell.reusableViewIdentifier(), for: indexPath)
+		return collection.dequeueReusableCell(withReuseIdentifier: /*Cell.reusableViewIdentifier()*/cellReuseIdentifier, for: indexPath)
 	}
 
 	public func registerReusableCellViewForDirector(_ director: CollectionDirector) -> Bool {
-		let id = Cell.reusableViewIdentifier()
-		guard director.cellReuseIDs.contains(id) == false else {
+		guard director.cellReuseIDs.contains(cellReuseIdentifier) == false else {
 			return false
 		}
-		Cell.registerReusableView(inCollection: director.collection, as: .cell)
-		director.cellReuseIDs.insert(id)
+        registerReusableView(forDirector: director)
+		director.cellReuseIDs.insert(cellReuseIdentifier)
 		return true
 	}
+    
+    
+    func registerReusableView(forDirector director: CollectionDirector) {
+        switch cellLoadSource {
+        case .fromStoryboard:
+            break
+            
+        case .fromXib(let name, let bundle):
+            let srcBundle = (bundle ?? Bundle.init(for: Cell.self))
+            let srcNib = UINib(nibName: (name ?? cellReuseIdentifier), bundle: srcBundle)
+            director.collection?.register(srcNib, forCellWithReuseIdentifier: cellReuseIdentifier)
+            
+        case .fromClass:
+            director.collection?.register(Cell.self, forCellWithReuseIdentifier: cellReuseIdentifier)
+            
+        }
+    }
 
 	public func dispatchEvent(_ kind: CollectionAdapterEventID, model: Any?, cell: ReusableCellViewProtocol?, path: IndexPath?, params: Any?...) -> Any? {
 		switch kind {
