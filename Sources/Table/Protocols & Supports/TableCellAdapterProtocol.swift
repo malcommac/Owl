@@ -24,10 +24,7 @@ public protocol TableCellAdapterProtocol {
 	func registerReusableCellViewForDirector(_ director: TableDirector) -> Bool
     
 	@discardableResult
-	func dispatchEvent(_ kind: TableAdapterEventID, model: Any?,
-					   cell: ReusableViewProtocol?,
-					   path: IndexPath?,
-					   params: Any?...) -> Any?
+	func dispatchEvent(_ kind: TableAdapterEventID, model: Any?, cell: ReusableViewProtocol?, path: IndexPath?, params: Any?...) -> Any?
 }
 
 public extension TableCellAdapterProtocol {

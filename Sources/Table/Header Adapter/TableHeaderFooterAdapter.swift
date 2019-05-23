@@ -43,12 +43,12 @@ public class TableHeaderFooterAdapter<View: UITableViewHeaderFooterView>: TableH
 
     /// This is the identifier of the view. You can change it before dequeueing it
     /// but by default is set to the name of the class used as `View` itself.
-    public var viewReuseIdentifier: String
+    public var reusableViewIdentifier: String
     
     /// This is the source used to load the header/footer view. By default the value
     /// is set to `.fromXib(name: nil, bundle: nil)` which means the view UI is inside
     /// a view with the same name of the class itself inside bundle where the class is set.
-    public var viewLoadSource: ReusableViewLoadSource
+    public var reusableViewLoadSource: ReusableViewLoadSource
     
     // Events you can assign to monitor the header/footer of a section.
     public var events = HeaderFooterEventsSubscriber()
@@ -56,15 +56,15 @@ public class TableHeaderFooterAdapter<View: UITableViewHeaderFooterView>: TableH
     // MARK: - Initialization -
     
     public init(_ configuration: ((TableHeaderFooterAdapter) -> ())? = nil) {
-        self.viewReuseIdentifier = String(describing: View.self)
-        self.viewLoadSource = .fromXib(name: nil, bundle: nil)
+        self.reusableViewIdentifier = String(describing: View.self)
+        self.reusableViewLoadSource = .fromXib(name: nil, bundle: nil)
         configuration?(self)
     }
     
     // MARK: - Helper Function s-
     
     public func registerHeaderFooterViewForDirector(_ director: TableDirector) -> String {
-        let id = viewReuseIdentifier//View.reusableViewIdentifier()
+        let id = reusableViewIdentifier//View.reusableViewIdentifier()
         guard director.headerFooterReuseIdentifiers.contains(id) == false else {
             return id
         }
@@ -73,23 +73,23 @@ public class TableHeaderFooterAdapter<View: UITableViewHeaderFooterView>: TableH
     }
     
     func registerReusableViewAsType(forDirector director: TableDirector) {
-        switch viewLoadSource {
+        switch reusableViewLoadSource {
         case .fromStoryboard:
             fatalError("Cannot load header/footer from storyboard. Use another source (xib/class) instead.")
             
         case .fromXib(let name, let bundle):
             let srcBundle = (bundle ?? Bundle.init(for: View.self))
-            let srcNib = UINib(nibName: (name ?? viewReuseIdentifier), bundle: srcBundle)
-            director.table?.register(srcNib, forHeaderFooterViewReuseIdentifier: viewReuseIdentifier)
+            let srcNib = UINib(nibName: (name ?? reusableViewIdentifier), bundle: srcBundle)
+            director.table?.register(srcNib, forHeaderFooterViewReuseIdentifier: reusableViewIdentifier)
             
         case .fromClass:
-            director.table?.register(View.self, forHeaderFooterViewReuseIdentifier: viewReuseIdentifier)
+            director.table?.register(View.self, forHeaderFooterViewReuseIdentifier: reusableViewIdentifier)
 
         }
     }
     
     public func dequeueHeaderFooterForDirector(_ director: TableDirector) -> UITableViewHeaderFooterView? {
-        return director.table?.dequeueReusableHeaderFooterView(withIdentifier: viewReuseIdentifier)
+        return director.table?.dequeueReusableHeaderFooterView(withIdentifier: reusableViewIdentifier)
     }
     
     @discardableResult

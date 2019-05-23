@@ -99,7 +99,7 @@ director?.reload()
 	- [3.1 - Create Model](#3.1)
 	- [3.2 - Create UI (cells)](#3.2)
 	- [3.3 - Manage Self-Sized Cells](#3.3)
-	- [3.4 - Loading Cells from Storyboard, Xib or class](#3.4)
+	- [3.4 - Load Cells/View from Storyboard/Xib/Class](#3.4)
 	- [3.5 - Custom Section's Header/Footer (String/View based)](#3.5)
 	- [3.6 - Reload data with automatic animations](#3.6)
 	- [3.7 - Working with Headers & Footers](#3.7)
@@ -109,11 +109,11 @@ director?.reload()
 
 <a name="1"/>
 
-### Introduction: Director & Adapters
+# 1.0 - Introduction: Director & Adapters
 
 All the Owl's SDK is based upon two concepts: the **director** and the **adapter**.
 
-#### Director
+## Director
 
 The **director** is the class which manage the content of a list, keep in sync data with UI and offers all the methods and properties to manage it. When you need to add, move or remove a section or a cell, change the header or a footer you find all the methods and properties in this class.
 A director instance can be associated with only one list (table or collection); once a director is assigned to a list it become the datasource and delegate of the object.
@@ -123,7 +123,7 @@ The following directors are available:
 - `TableDirector` used to manage `UITableView` instances
 - `CollectionDirector` and `FlowCollectionDirector` used to manage `UICollectionView` with custom or `UICollectionViewFlowLayout` layout.
 
-#### Adapters
+## Adapters
 
 Once you have created a new director for a list it's time to declare what kind of models your list can accept. Each model is assigned to one UI element (`UITableViewCell` subclass for tables, `UICollectionViewCell` subclass for collections).
 
@@ -137,7 +137,7 @@ You will register as much adapters as models you have.
 
 <a name="2"/>
 
-### Getting Started
+# 2.0 - Getting Started
 
 The following code shows how to create a director to manage an `UITableView` (a much similar approach is used for `UICollectionView`).
 
@@ -245,11 +245,11 @@ catalogAdapter.events.commitEdit = { [weak self] ctx, style in
 
 <a name="3"/>
 
-### How-To
+# 3.0 - How-To
 
 <a name="3.1"/>
 
-#### Create Model
+## 3.1 - Create Model
 
 Models can be struct or classes; the only requirement is the conformance to `ElementRepresentable` protocol.
 This protocol is used by the diff algorithm in order to evaluate the difference between changes applied to models and pick the best animation to show it.
@@ -279,8 +279,6 @@ public class Contact: ElementRepresentable {
 }
 ```
 
-##### Protocol Conformance
-
 Protocol conformance is made by adding:
 
 - `differenceIdentifier` property: An model needs to be uniquely identified to tell if there have been any insertions or deletions (it's the perfect place for a `uuid` property)
@@ -288,38 +286,56 @@ Protocol conformance is made by adding:
 
 <a name="3.2"/>
 
-#### Create UI (Cells)
+## 3.2 - Create UI (Cells)
 
 The second step is to create an UI representation of your model. Typically is a subclass of `UITableViewCell` or `UICollectionViewCell`.
 
-##### Reuse Identifier
+## Reuse Identifier
 
 Cells must have as `reuseIdentifier` value the same name of the class itself (so `ContactCell` has also `ContactCell` as identifier; you can also configure it if you need but it's a good practice).
 
 <a name="3.3"/>
 
-##### Loading Cells from Storyboard, Xib or class
+## 3.3 - Load Cells/View from Storyboard/Xib/Class
 
-By default cells are loaded from managed table/collection instance storyboard but sometimes you may also need to load them from external files like xib.
-In this case you must override the static `reusableViewSource` property of your cell subclass and provide the best loading source between values of `ReusableViewSource`:
+This is the behaviour used to load/dequeue cells and header/footer both for tables and collection views:
 
-- `fromStoryboard`: load from storyboard (the default value, use it when your cell is defined as prototype inside table's instance).
-- `fromXib(name: String?, bundle: Bundle?)`: load from a specific xib file in a bundle (if `name` is nil it uses the same filename of the cell class, ie `ContactCell.xib`; if `bundle` is `nil` it uses the same bundle of your cell class.
+| Entity 	| Default Reusable Identifier 	| Default Loading Method 	|
+|--------------------------------------------------------------------------------	|-----------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
+| Cells (`UITableViewCell`,`UICollectionViewCell`) 	| Name of the class 	| Load the UI with the reusable identifier from the parent table's storyboard cell prototypes list 	|
+| Header/Footer View (`UITableViewHeaderFooterView`, `UICollectionReusableView`) 	| Name of the class 	| Attempt to load the view as the root element of the xib with the same name of the class (ie. "GroupHeaderView.xib") contained in the same bundle of the class itself. 	|
+
+You can however this behaviour by setting the following attributes before the adapter (`TableAdapter` or `TableHeaderFooterAdapter` for table's cells and header/footer, `CollectionAdapter`/`CollectionHeaderFooterAdapter ` for collections's cell and header/footer):
+
+- `reusableViewIdentifier`: set a new reusable identifier to use.
+- `reusableViewLoadSource`: change the source where the view is dequeued (for cells the default value is `.fromStoryboard`, for header/footer is `.fromXib(name:nil, bundle: nil)`). Allowed values are:
+
+By default cells or header/footer will use the name of the class itself as `reusableIdentifier` (for example, your cell `ContactCell` must have the identifier set to `ContactCell`).
+This is an useful convention to avoid strange identifiers.
+
+However you can still override this behaviour by setting `cellReuseIdentifier` (in `TableAdapter` or `CollectionAdapter` for cells) and `viewReuseIdentifier` (in `TableHeaderFooterAdapter`/`CollectionHeaderFooterAdapter` for header/footer).
+
+Another interesting property is `viewLoadSource`; this specify where Owl must search the UI of the cell/view you are about to load. Allowed values are:
+
+- `fromStoryboard`: load from storyboard inside the table/collection's prototypes list (default value for cells).
+- `fromXib(name: String?, bundle: Bundle?)`: load from a specific xib file in a bundle (if `name` is nil it uses the same filename of the cell class, ie `ContactCell.xib`; if `bundle` is `nil` it uses the same bundle of the class.
 - `fromClass`: loading from class.
 
-The following example load a cell from an external xib file named `MyContactCell.xib`:
+The following example load a cell from an external xib with the same name of the class (`ContactCell.xib`) and contained in the same bundle of the cell class itself.
+The same approach is valid for header/footer.
 
 ```swift
-public class ContactCell: UITableViewCell {
-    // ...
-    
-    public static var reusableViewSource: ReusableViewSource {
-        return .fromXib(name: "MyContactCell", bundle: nil)
-    }
-}
+let contactAdpt = TableCellAdapter<Contact, ContactCell>()
+// instead of load cell from storyboard it will be loaded by
+// reading the root view inside the xib with the same name of the class
+contactAdpt.viewLoadSource = .fromXib(name:nil, bundle:nil)
+// optionally you can also set a custom id
+contactAdpt.viewReuseIdentifier = "CustomContactCellID"
+// configure...
+director?.registerCellAdapter(contactAdpt)
 ```
 
-##### Best Practices
+## Best Practices
 
 You don't need to conform any special protocol but, in order to keep your code clean, our suggestion is to create a public property which accepts the model instance and set it on adapter's `dequeue` event.
 
@@ -350,7 +366,7 @@ contactAdpt.events.dequeue = { ctx in
 
 <a name="3.4"/>
 
-#### Manage Self-Sized Cells
+## 3.4 - Manage Self-Sized Cells
 
 Self-sized cells are easy to be configured, both for tables and collection views.
 
@@ -364,7 +380,7 @@ Accepted values are:
 
 <a name="3.5"/>
 
-#### Custom Section's Header/Footer
+## 3.5 - Custom Section's Header/Footer
 
 Sections (both `TableSection` and `CollectionSection`) can be configured to have both simple (`String`) or complex (custom views) header/footer.
 Custom Header/Footer are configured in the same way you have made for cells, by using the concept of adapter.
@@ -407,7 +423,7 @@ in the `ctx` parameter you will receive the section which generates the event.
 
 <a name="3.6"/>
 
-#### Reload data with automatic animations
+## 3.6 - Reload data with automatic animations
 
 Owl supports automatic animated reload of the data between changes.
 With this feature you don't need to think about calling (even *in the correct order*) `reloadRows/deleteRows/removeRows` methods when changing your data source: just perform changes to your model in a callback and, at the end, Owl will generate the corrrect sequence of the animations.
@@ -461,7 +477,7 @@ Moreover it way faster than [IGListKit](https://github.com/Instagram/IGListKit) 
 
 <a name="3.7"/>
 
-#### 3.7 - Working with Headers & Footers
+## 3.7 - Working with Headers & Footers
 
 Headers and Footers in Owl are managed in the same way already used for Cells, using Adapter; however due to its nature (instead of cells they are not strictly correlated to a specific model class) you will create an adapter which links just the view used to render it (subclass of `UITableViewHeaderFooterView` for `UITableView` and subclass of `UICollectionReusableView` for `UICollectionView`).
 
@@ -476,7 +492,7 @@ Suppose you want to make an header/footer class called `GroupHeaderView` for you
 ![](./Documentation/header_footer.png)
 
 `GroupHeaderView .swift` file with your class implementation.
-In a standard configuration you don't need to make anything special to use. `UITableViewHeaderFooterView` has already its own default implementation for `ReusableCellViewProtocol`.
+In a standard configuration you don't need to make anything special; just subclass `UITableViewHeaderFooterView`:
 
 ```swift
 import UIKit

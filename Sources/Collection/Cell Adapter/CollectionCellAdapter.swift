@@ -24,12 +24,12 @@ public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableVi
     
     /// This is the reusable identifier to dequeue cell. By default is set to the same
     /// name of the class used as `Cell` but you can override it before using the adapter itself.
-    public var cellReuseIdentifier: String
+    public var reusableViewIdentifier: String
     
     /// This is the source used to dequeue the cell itself. By default is set to `.fromStoryboard`
     /// and it means the cell UI is searched inside the the director's table.
     /// You can however set it before the first dequeue is made to load it as class or from an external xib.
-    public var cellLoadSource: ReusableViewLoadSource
+    public var reusableViewLoadSource: ReusableViewLoadSource
     
 	// MARK: - Public Functions -
 
@@ -37,39 +37,39 @@ public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableVi
 	public var events = CollectionCellAdapter.EventsSubscriber()
 
 	public init(_ configuration: ((CollectionCellAdapter) -> Void)? = nil) {
-        self.cellReuseIdentifier = String(describing: Cell.self)
-        self.cellLoadSource = .fromStoryboard
+        self.reusableViewIdentifier = String(describing: Cell.self)
+        self.reusableViewLoadSource = .fromStoryboard
 		configuration?(self)
 	}
 	
 	// MARK: - Adapter Helpers Functions -
 
 	public func dequeueCell(inCollection collection: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
-		return collection.dequeueReusableCell(withReuseIdentifier: /*Cell.reusableViewIdentifier()*/cellReuseIdentifier, for: indexPath)
+		return collection.dequeueReusableCell(withReuseIdentifier: /*Cell.reusableViewIdentifier()*/reusableViewIdentifier, for: indexPath)
 	}
 
 	public func registerReusableCellViewForDirector(_ director: CollectionDirector) -> Bool {
-		guard director.cellReuseIDs.contains(cellReuseIdentifier) == false else {
+		guard director.cellReuseIDs.contains(reusableViewIdentifier) == false else {
 			return false
 		}
         registerReusableView(forDirector: director)
-		director.cellReuseIDs.insert(cellReuseIdentifier)
+		director.cellReuseIDs.insert(reusableViewIdentifier)
 		return true
 	}
     
     
     func registerReusableView(forDirector director: CollectionDirector) {
-        switch cellLoadSource {
+        switch reusableViewLoadSource {
         case .fromStoryboard:
             break
             
         case .fromXib(let name, let bundle):
             let srcBundle = (bundle ?? Bundle.init(for: Cell.self))
-            let srcNib = UINib(nibName: (name ?? cellReuseIdentifier), bundle: srcBundle)
-            director.collection?.register(srcNib, forCellWithReuseIdentifier: cellReuseIdentifier)
+            let srcNib = UINib(nibName: (name ?? reusableViewIdentifier), bundle: srcBundle)
+            director.collection?.register(srcNib, forCellWithReuseIdentifier: reusableViewIdentifier)
             
         case .fromClass:
-            director.collection?.register(Cell.self, forCellWithReuseIdentifier: cellReuseIdentifier)
+            director.collection?.register(Cell.self, forCellWithReuseIdentifier: reusableViewIdentifier)
             
         }
     }
