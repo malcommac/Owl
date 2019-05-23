@@ -186,7 +186,8 @@ open class TableDirector: NSObject {
     @usableFromInline
     internal func adapterForHeaderFooterView(_ view: UIView) -> TableHeaderFooterAdapterProtocol? {
         guard let view = view as? UITableViewHeaderFooterView else { return nil }
-        return headerFooterAdapters[type(of: view).reusableViewIdentifier]
+        let s = String(describing: view.self)
+        return headerFooterAdapters[s]//type(of: view).reusableViewIdentifier()]
     }
 	
 	// MARK: - Add Sections -
@@ -264,7 +265,7 @@ open class TableDirector: NSObject {
 			indexPath.row < sections[indexPath.section].elements.count else {
 				return nil
 		}
-		return sections[indexPath.section].elements[indexPath.section]
+		return sections[indexPath.section].elements[indexPath.row]
 	}
 	
 	// MARK: - Remove Sections -
@@ -450,7 +451,7 @@ open class TableDirector: NSObject {
 
 	internal func adapterForCell(_ cell: UITableViewCell) -> TableCellAdapterProtocol? {
 		return cellAdapters.first(where: { item in
-			return item.value.modelCellType == type(of: cell)
+			return item.value.modelViewType == type(of: cell)
 		})?.value
 	}
 

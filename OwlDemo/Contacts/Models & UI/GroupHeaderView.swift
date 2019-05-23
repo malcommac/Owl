@@ -11,5 +11,4 @@ import UIKit
 public class GroupHeaderView: UITableViewHeaderFooterView {
 	@IBOutlet public var headerTitleLabel: UILabel?
 	@IBOutlet public var headerSubtitleLabel: UILabel?
-
 }

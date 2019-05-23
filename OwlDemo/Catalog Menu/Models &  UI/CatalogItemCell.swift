@@ -21,9 +21,5 @@ public class CatalogItemCell: UITableViewCell {
 			iconImageView.image = item?.icon
 		}
 	}
-    
-    public static var reusableViewSource: ReusableViewSource {
-        return .fromClass
-    }
 
 }

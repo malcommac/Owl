@@ -10,4 +10,9 @@ import UIKit
 
 public class GroupFooterView: UITableViewHeaderFooterView {
 	@IBOutlet public var footerLabel: UILabel?
+    
+//    public static func reusableViewSource() -> ReusableViewSource {
+//        return .fromClass
+//    }
+//    
 }

@@ -25,7 +25,7 @@ public protocol CollectionCellAdapterProtocol {
 
 	@discardableResult
 	func dispatchEvent(_ kind: CollectionAdapterEventID, model: Any?,
-					   cell: ReusableCellViewProtocol?,
+					   cell: ReusableViewProtocol?,
 					   path: IndexPath?,
 					   params: Any?...) -> Any?
 }
