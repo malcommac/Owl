@@ -451,7 +451,7 @@ open class TableDirector: NSObject {
 
 	internal func adapterForCell(_ cell: UITableViewCell) -> TableCellAdapterProtocol? {
 		return cellAdapters.first(where: { item in
-			return item.value.modelCellType == type(of: cell)
+			return item.value.modelViewType == type(of: cell)
 		})?.value
 	}
 

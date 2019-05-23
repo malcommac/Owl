@@ -20,7 +20,7 @@ open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableViewProto
     public var modelType: Any.Type = Model.self
     
     /// This is the cell type used to dequeue the model. You should not alter it.
-    public var modelCellType: Any.Type = Cell.self
+    public var modelViewType: Any.Type = Cell.self
     
     /// This is the reusable identifier to dequeue cell. By default is set to the same
     /// name of the class used as `Cell` but you can override it before using the adapter itself.
@@ -46,7 +46,7 @@ open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableViewProto
 
 	public func dequeueCell(inTable table: UITableView, at indexPath: IndexPath?) -> UITableViewCell {
 		guard let indexPath = indexPath else {
-            let castedCell = modelCellType as! UITableViewCell.Type
+            let castedCell = modelViewType as! UITableViewCell.Type
 			let cellInstance = castedCell.init()
 			return cellInstance
 		}

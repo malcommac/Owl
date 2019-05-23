@@ -15,7 +15,7 @@ import UIKit
 public protocol TableCellAdapterProtocol {
 
 	var modelType: Any.Type { get }
-	var modelCellType: Any.Type { get }
+	var modelViewType: Any.Type { get }
 	var modelIdentifier: String { get }
 
 	func dequeueCell(inTable: UITableView, at indexPath: IndexPath?) -> UITableViewCell
