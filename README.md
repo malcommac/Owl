@@ -97,7 +97,7 @@ director?.reload()
 - 2 - [Getting Started](#2)
 - 3 - [How-To](#3)
 	- [3.1 - Create Model](#3.1)
-	- [3.2 - Create UI (cells)](#3.2)
+	- [3.2 - Create The Cell](#3.2)
 	- [3.3 - Manage Self-Sized Cells](#3.3)
 	- [3.4 - Load Cells/View from Storyboard/Xib/Class](#3.4)
 	- [3.5 - Custom Section's Header/Footer (String/View based)](#3.5)
@@ -243,6 +243,8 @@ catalogAdapter.events.commitEdit = { [weak self] ctx, style in
 }
 ```
 
+[↑ Back To Top](#index)
+
 <a name="3"/>
 
 # 3.0 - How-To
@@ -284,9 +286,11 @@ Protocol conformance is made by adding:
 - `differenceIdentifier` property: An model needs to be uniquely identified to tell if there have been any insertions or deletions (it's the perfect place for a `uuid` property)
 - `isContentEqual(to:)` function: is used to check if any properties have changed, this is for replacement changes. If your model data change between reloads Owl updates the cell's UI accordingly.
 
+[↑ Back To Top](#index)
+
 <a name="3.2"/>
 
-## 3.2 - Create UI (Cells)
+## 3.2 - Create the Cell
 
 The second step is to create an UI representation of your model. Typically is a subclass of `UITableViewCell` or `UICollectionViewCell`.
 
@@ -294,11 +298,58 @@ The second step is to create an UI representation of your model. Typically is a 
 
 Cells must have as `reuseIdentifier` value the same name of the class itself (so `ContactCell` has also `ContactCell` as identifier; you can also configure it if you need but it's a good practice).
 
+## Best Practices
+
+You don't need to conform any special protocol but, in order to keep your code clean, our suggestion is to create a public property which accepts the model instance and set it on adapter's `dequeue` event.
+
+```swift
+public class ContactCell: UITableViewCell {
+
+	// Your outlets
+    @IBOutlet public var ...
+
+	// Define a property you set on adapter's dequeue event
+	public var contact: Contact? {
+		didSet {
+           // setup your UI according with instance data
+		}
+	}
+}
+```
+
+In your adapter:
+
+```swift
+contactAdpt.events.dequeue = { ctx in
+	ctx.cell?.contact = ctx.element
+}
+```
+
+`ctx` is an object which includes all the necessary informations of an event, including type-safe instance of the model.
+
+[↑ Back To Top](#index)
+
 <a name="3.3"/>
 
-## 3.3 - Load Cells/View from Storyboard/Xib/Class
+## 3.3 - Manage Self-Sized Cells
 
-This is the behaviour used to load/dequeue cells and header/footer both for tables and collection views:
+Self-sized cells are easy to be configured, both for tables and collection views.
+
+Owl support easy cell sizing using autolayout. You can set the size of the cell by adapter or collection/table based. For autolayout driven cell sizing set the `rowHeight` (for `TableDirector`) or `itemSize` (for `CollectionDirector`/`FlowCollectionDirector`) to the autoLayout value, then provide an estimated value.
+
+Accepted values are:
+
+- `default`: you must provide the height (table) or size (collection) of the cell
+- `auto(estimated: CGFloat)`: uses autolayout to evaluate the height of the cell; for Collection Views you can also provide your own calculation by overriding `preferredLayoutAttributesFitting()` function in cell instance.
+- `explicit(CGFloat)`: provide a fixed height for all cell types (faster if you plan to have all cell sized same)
+
+[↑ Back To Top](#index)
+
+<a name="3.4"/>
+
+## 3.4 - Load Cells/View from Storyboard/Xib/Class
+
+This is the behaviour used to load/dequeue cells and header/footer both for tables and collection views is:
 
 | Entity 	| Default Reusable Identifier 	| Default Loading Method 	|
 |--------------------------------------------------------------------------------	|-----------------------------	|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
@@ -335,48 +386,7 @@ contactAdpt.viewReuseIdentifier = "CustomContactCellID"
 director?.registerCellAdapter(contactAdpt)
 ```
 
-## Best Practices
-
-You don't need to conform any special protocol but, in order to keep your code clean, our suggestion is to create a public property which accepts the model instance and set it on adapter's `dequeue` event.
-
-```swift
-public class ContactCell: UITableViewCell {
-
-	// Your outlets
-    @IBOutlet public var ...
-
-	// Define a property you set on adapter's dequeue event
-	public var contact: Contact? {
-		didSet {
-           // setup your UI according with instance data
-		}
-	}
-}
-```
-
-In your adapter:
-
-```swift
-contactAdpt.events.dequeue = { ctx in
-	ctx.cell?.contact = ctx.element
-}
-```
-
-`ctx` is an object which includes all the necessary informations of an event, including type-safe instance of the model.
-
-<a name="3.4"/>
-
-## 3.4 - Manage Self-Sized Cells
-
-Self-sized cells are easy to be configured, both for tables and collection views.
-
-Owl support easy cell sizing using autolayout. You can set the size of the cell by adapter or collection/table based. For autolayout driven cell sizing set the `rowHeight` (for `TableDirector`) or `itemSize` (for `CollectionDirector`/`FlowCollectionDirector`) to the autoLayout value, then provide an estimated value.
-
-Accepted values are:
-
-- `default`: you must provide the height (table) or size (collection) of the cell
-- `auto(estimated: CGFloat)`: uses autolayout to evaluate the height of the cell; for Collection Views you can also provide your own calculation by overriding `preferredLayoutAttributesFitting()` function in cell instance.
-- `explicit(CGFloat)`: provide a fixed height for all cell types (faster if you plan to have all cell sized same)
+[↑ Back To Top](#index)
 
 <a name="3.5"/>
 
@@ -420,6 +430,8 @@ let newSection = CollectionSection(id: "Section \(idx)" ,elements: elements, hea
 ```
 
 in the `ctx` parameter you will receive the section which generates the event.
+
+[↑ Back To Top](#index)
 
 <a name="3.6"/>
 
@@ -474,6 +486,8 @@ Compared to IGListKit it allows:
 |IGListKit    |❌    |❌     |❌  |❌    |
 
 Moreover it way faster than [IGListKit](https://github.com/Instagram/IGListKit) and [RxDataSources](https://github.com/RxSwiftCommunity/RxDataSources) counterparts!
+
+[↑ Back To Top](#index)
 
 <a name="3.7"/>
 
