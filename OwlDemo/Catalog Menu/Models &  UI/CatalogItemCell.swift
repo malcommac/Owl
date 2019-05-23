@@ -22,7 +22,7 @@ public class CatalogItemCell: UITableViewCell {
 		}
 	}
     
-    public static var reusableViewSource: ReusableViewSource {
+    public class var reusableViewSource: ReusableViewSource {
         return .fromClass
     }
 

@@ -43,19 +43,19 @@ public class CollectionHeaderFooterAdapter<View: UICollectionReusableView>: Coll
 	}
     
     public func dequeueHeaderFooterForDirector(_ director: CollectionDirector, type: String, indexPath: IndexPath) -> UICollectionReusableView? {
-        let identifier = View.reusableViewIdentifier
+        let identifier = View.reusableViewIdentifier()
         return director.collection?.dequeueReusableSupplementaryView(ofKind: type, withReuseIdentifier: identifier, for: indexPath)
     }
     
     public func registerHeaderFooterViewForDirector(_ director: CollectionDirector, kind: String) -> String {
-        let identifier = View.reusableViewIdentifier
+        let identifier = View.reusableViewIdentifier()
         if     (kind == UICollectionView.elementKindSectionHeader && director.headerReuseIDs.contains(identifier)) ||
             (kind == UICollectionView.elementKindSectionFooter && director.footerReuseIDs.contains(identifier)) {
             return identifier
         }
         
         let collection = director.collection
-        switch View.reusableViewSource {
+        switch View.reusableViewSource() {
         case .fromStoryboard:
             break
             
@@ -64,7 +64,7 @@ public class CollectionHeaderFooterAdapter<View: UICollectionReusableView>: Coll
             collection?.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
             
         case .fromClass:
-            collection?.register(View.reusableViewClass, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
+            collection?.register(View.reusableViewClass(), forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
             
         }
         

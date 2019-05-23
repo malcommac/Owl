@@ -11,5 +11,5 @@ import UIKit
 public class EmojiHeaderView: UICollectionReusableView {
     
     @IBOutlet public var titleLabel: UILabel!
-    
+ 
 }

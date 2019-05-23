@@ -30,11 +30,11 @@ public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableCe
 	// MARK: - Adapter Helpers Functions -
 
 	public func dequeueCell(inCollection collection: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell {
-		return collection.dequeueReusableCell(withReuseIdentifier: Cell.reusableViewIdentifier, for: indexPath)
+		return collection.dequeueReusableCell(withReuseIdentifier: Cell.reusableViewIdentifier(), for: indexPath)
 	}
 
 	public func registerReusableCellViewForDirector(_ director: CollectionDirector) -> Bool {
-		let id = Cell.reusableViewIdentifier
+		let id = Cell.reusableViewIdentifier()
 		guard director.cellReuseIDs.contains(id) == false else {
 			return false
 		}

@@ -26,8 +26,8 @@ extension UITableViewHeaderFooterView: ReusableCellViewProtocol {
 		return self
 	}
 
-	public static var reusableViewSource: ReusableViewSource {
+	/*public static var reusableViewSource: ReusableViewSource {
 		return .fromXib(name: nil,bundle: nil)
-	}
+	}*/
 
 }

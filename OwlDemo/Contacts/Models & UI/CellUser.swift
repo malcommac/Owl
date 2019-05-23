@@ -11,4 +11,9 @@ import UIKit
 public class CellUser: UITableViewCell {
 	@IBOutlet public var nameSurnameLabel: UILabel?
 	@IBOutlet public var biographyLabel: UILabel?
+    
+    public static var reusableViewSource: ReusableViewSource {
+        return .fromStoryboard
+    }
+    
 }

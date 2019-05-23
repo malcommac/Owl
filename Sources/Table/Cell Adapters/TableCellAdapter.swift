@@ -34,15 +34,15 @@ open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewP
 
 	public func dequeueCell(inTable table: UITableView, at indexPath: IndexPath?) -> UITableViewCell {
 		guard let indexPath = indexPath else {
-			let castedCell = Cell.reusableViewClass as! UITableViewCell.Type
+			let castedCell = Cell.reusableViewClass() as! UITableViewCell.Type
 			let cellInstance = castedCell.init()
 			return cellInstance
 		}
-		return table.dequeueReusableCell(withIdentifier: Cell.reusableViewIdentifier, for: indexPath)
+		return table.dequeueReusableCell(withIdentifier: Cell.reusableViewIdentifier(), for: indexPath)
 	}
 
 	public func registerReusableCellViewForDirector(_ director: TableDirector) -> Bool {
-		let id = Cell.reusableViewIdentifier
+		let id = Cell.reusableViewIdentifier()
 		guard director.cellReuseIDs.contains(id) == false else {
 			return false
 		}

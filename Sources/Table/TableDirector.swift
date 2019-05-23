@@ -186,7 +186,7 @@ open class TableDirector: NSObject {
     @usableFromInline
     internal func adapterForHeaderFooterView(_ view: UIView) -> TableHeaderFooterAdapterProtocol? {
         guard let view = view as? UITableViewHeaderFooterView else { return nil }
-        return headerFooterAdapters[type(of: view).reusableViewIdentifier]
+        return headerFooterAdapters[type(of: view).reusableViewIdentifier()]
     }
 	
 	// MARK: - Add Sections -
