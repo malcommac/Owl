@@ -366,7 +366,7 @@ This is an useful convention to avoid strange identifiers.
 
 However you can still override this behaviour by setting `cellReuseIdentifier` (in `TableAdapter` or `CollectionAdapter` for cells) and `viewReuseIdentifier` (in `TableHeaderFooterAdapter`/`CollectionHeaderFooterAdapter` for header/footer).
 
-Another interesting property is `viewLoadSource`; this specify where Owl must search the UI of the cell/view you are about to load. Allowed values are:
+Another interesting property is `reusableViewLoadSource`; this specify where Owl must search the UI of the cell/view you are about to load. Allowed values are:
 
 - `fromStoryboard`: load from storyboard inside the table/collection's prototypes list (default value for cells).
 - `fromXib(name: String?, bundle: Bundle?)`: load from a specific xib file in a bundle (if `name` is nil it uses the same filename of the cell class, ie `ContactCell.xib`; if `bundle` is `nil` it uses the same bundle of the class.
@@ -379,7 +379,7 @@ The same approach is valid for header/footer.
 let contactAdpt = TableCellAdapter<Contact, ContactCell>()
 // instead of load cell from storyboard it will be loaded by
 // reading the root view inside the xib with the same name of the class
-contactAdpt.viewLoadSource = .fromXib(name:nil, bundle:nil)
+contactAdpt.reusableViewLoadSource = .fromXib(name:nil, bundle:nil)
 // optionally you can also set a custom id
 contactAdpt.viewReuseIdentifier = "CustomContactCellID"
 // configure...
