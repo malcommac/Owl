@@ -381,7 +381,7 @@ let contactAdpt = TableCellAdapter<Contact, ContactCell>()
 // reading the root view inside the xib with the same name of the class
 contactAdpt.reusableViewLoadSource = .fromXib(name:nil, bundle:nil)
 // optionally you can also set a custom id
-contactAdpt.viewReuseIdentifier = "CustomContactCellID"
+contactAdpt.reusableViewIdentifier = "CustomContactCellID"
 // configure...
 director?.registerCellAdapter(contactAdpt)
 ```
