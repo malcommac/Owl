@@ -12,7 +12,7 @@
 
 import UIKit
 
-open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewProtocol>: TableCellAdapterProtocol {
+open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableViewProtocol>: TableCellAdapterProtocol {
 
     // MARK: - Public Properties -
 
@@ -29,7 +29,7 @@ open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewP
     /// This is the source used to dequeue the cell itself. By default is set to `.fromStoryboard`
     /// and it means the cell UI is searched inside the the director's table.
     /// You can however set it before the first dequeue is made to load it as class or from an external xib.
-    public var cellLoadSource: ReusableViewSource
+    public var cellLoadSource: ReusableViewLoadSource
 
 	/// Events you can observe from the adapter.
 	public let events = EventsSubscriber()
@@ -84,7 +84,7 @@ open class TableCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewP
 	// MARK: - Supporting Functions -
 
 	@discardableResult
-	public func dispatchEvent(_ kind: TableAdapterEventID, model: Any?, cell: ReusableCellViewProtocol?, path: IndexPath?, params: Any?...) -> Any? {
+	public func dispatchEvent(_ kind: TableAdapterEventID, model: Any?, cell: ReusableViewProtocol?, path: IndexPath?, params: Any?...) -> Any? {
 		switch kind {
 		case .dequeue:
 			events.dequeue?(TableCellAdapter.Event(item: model, cell: cell, indexPath: path))

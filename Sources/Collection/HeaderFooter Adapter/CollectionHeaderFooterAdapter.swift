@@ -42,7 +42,7 @@ public class CollectionHeaderFooterAdapter<View: UICollectionReusableView>: Coll
     /// This is the source used to load the header/footer view. By default the value
     /// is set to `.fromXib(name: nil, bundle: nil)` which means the view UI is inside
     /// a view with the same name of the class itself inside bundle where the class is set.
-    public var viewLoadSource: ReusableViewSource
+    public var viewLoadSource: ReusableViewLoadSource
     
     /// Events you can subscribe for header/footer instances.
     public var events = EventsSubscriber()

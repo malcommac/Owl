@@ -21,12 +21,12 @@ public protocol TableSectionHeaderFooterProtocol {
 	func dispatch(_ event: TableSectionEvents, isHeader: Bool, view: UIView?, section: Int, table: UITableView) -> Any?
 }
 
-extension UITableViewHeaderFooterView: ReusableCellViewProtocol {
+extension UITableViewHeaderFooterView: ReusableViewProtocol {
 	public static var reusableViewClass: AnyClass {
 		return self
 	}
 
-    public static func reusableViewSource() -> ReusableViewSource {
+    public static func reusableViewSource() -> ReusableViewLoadSource {
         return .fromXib(name: nil,bundle: nil)
     }
 

@@ -25,7 +25,7 @@ public protocol TableCellAdapterProtocol {
     
 	@discardableResult
 	func dispatchEvent(_ kind: TableAdapterEventID, model: Any?,
-					   cell: ReusableCellViewProtocol?,
+					   cell: ReusableViewProtocol?,
 					   path: IndexPath?,
 					   params: Any?...) -> Any?
 }

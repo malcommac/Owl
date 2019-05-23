@@ -12,7 +12,7 @@
 
 import UIKit
 
-public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableCellViewProtocol>: CollectionCellAdapterProtocol {
+public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableViewProtocol>: CollectionCellAdapterProtocol {
 
     // MARK: - Public Properties -
 
@@ -29,7 +29,7 @@ public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableCe
     /// This is the source used to dequeue the cell itself. By default is set to `.fromStoryboard`
     /// and it means the cell UI is searched inside the the director's table.
     /// You can however set it before the first dequeue is made to load it as class or from an external xib.
-    public var cellLoadSource: ReusableViewSource
+    public var cellLoadSource: ReusableViewLoadSource
     
 	// MARK: - Public Functions -
 
@@ -74,7 +74,7 @@ public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableCe
         }
     }
 
-	public func dispatchEvent(_ kind: CollectionAdapterEventID, model: Any?, cell: ReusableCellViewProtocol?, path: IndexPath?, params: Any?...) -> Any? {
+	public func dispatchEvent(_ kind: CollectionAdapterEventID, model: Any?, cell: ReusableViewProtocol?, path: IndexPath?, params: Any?...) -> Any? {
 		switch kind {
 		case .dequeue:
 			events.dequeue?(CollectionCellAdapter.Event(element: model, cell: cell, path: path))

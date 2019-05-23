@@ -12,7 +12,7 @@ public class CellUser: UITableViewCell {
 	@IBOutlet public var nameSurnameLabel: UILabel?
 	@IBOutlet public var biographyLabel: UILabel?
     
-    public static var reusableViewSource: ReusableViewSource {
+    public static var reusableViewSource: ReusableViewLoadSource {
         return .fromStoryboard
     }
     
