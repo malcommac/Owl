@@ -44,15 +44,16 @@ public extension ReusableCellViewProtocol {
 	}
 
     static func reusableViewIdentifier() -> String {
-		return String(describing: reusableViewType)
+		return String(describing: reusableViewType())
 	}
 
     static func registerReusableView(inTable table: UITableView?, as type: ReusableViewRegistrationType) {
         
         let reusableID = reusableViewIdentifier()
         let reusableClass: AnyClass = reusableViewClass()
+        let reusableSource = reusableViewSource()
         
-		switch reusableViewSource() {
+		switch reusableSource {
 		case .fromStoryboard:
 			if type.isHeaderFooter {
 				fatalError("Cannot load header/footer from storyboard. Use another source (xib/class) instead.")
@@ -83,8 +84,9 @@ public extension ReusableCellViewProtocol {
         
         let reusableID = reusableViewIdentifier()
         let reusableClass: AnyClass = reusableViewClass()
+        let reusableSource = reusableViewSource()
 
-		switch reusableViewSource() {
+		switch reusableSource {
 		case .fromStoryboard:
 			if type.isHeaderFooter {
 				fatalError("Cannot load header/footer from storyboard. Use another source (xib/class) instead.")
