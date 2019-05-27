@@ -15,25 +15,25 @@ import UIKit
 /// Events you can monitor from the director and related to the table
 public struct ScrollViewEventsHandler {
 
-	var didScroll: ((UIScrollView) -> Void)? = nil
-	var endScrollingAnimation: ((UIScrollView) -> Void)? = nil
+	public var didScroll: ((UIScrollView) -> Void)? = nil
+	public var endScrollingAnimation: ((UIScrollView) -> Void)? = nil
 
-	var shouldScrollToTop: ((UIScrollView) -> Bool)? = nil
-	var didScrollToTop: ((UIScrollView) -> Void)? = nil
+	public var shouldScrollToTop: ((UIScrollView) -> Bool)? = nil
+	public var didScrollToTop: ((UIScrollView) -> Void)? = nil
 
-	var willBeginDragging: ((UIScrollView) -> Void)? = nil
-	var willEndDragging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetOffset: UnsafeMutablePointer<CGPoint>) -> Void)? = nil
-	var endDragging: ((_ scrollView: UIScrollView, _ willDecelerate: Bool) -> Void)? = nil
+	public var willBeginDragging: ((UIScrollView) -> Void)? = nil
+	public var willEndDragging: ((_ scrollView: UIScrollView, _ velocity: CGPoint, _ targetOffset: UnsafeMutablePointer<CGPoint>) -> Void)? = nil
+	public var endDragging: ((_ scrollView: UIScrollView, _ willDecelerate: Bool) -> Void)? = nil
 
-	var willBeginDecelerating: ((UIScrollView) -> Void)? = nil
-	var endDecelerating: ((UIScrollView) -> Void)? = nil
+	public var willBeginDecelerating: ((UIScrollView) -> Void)? = nil
+	public var endDecelerating: ((UIScrollView) -> Void)? = nil
 
 	// zoom
-	var viewForZooming: ((UIScrollView) -> UIView?)? = nil
-	var willBeginZooming: ((_ scrollView: UIScrollView, _ view: UIView?) -> Void)? = nil
-	var endZooming: ((_ scrollView: UIScrollView, _ view: UIView?, _ scale: CGFloat) -> Void)? = nil
-	var didZoom: ((UIScrollView) -> Void)? = nil
+	public var viewForZooming: ((UIScrollView) -> UIView?)? = nil
+	public var willBeginZooming: ((_ scrollView: UIScrollView, _ view: UIView?) -> Void)? = nil
+	public var endZooming: ((_ scrollView: UIScrollView, _ view: UIView?, _ scale: CGFloat) -> Void)? = nil
+	public var didZoom: ((UIScrollView) -> Void)? = nil
 
-	var didChangeAdjustedContentInset: ((UIScrollView) -> Void)? = nil
+	public var didChangeAdjustedContentInset: ((UIScrollView) -> Void)? = nil
 
 }
