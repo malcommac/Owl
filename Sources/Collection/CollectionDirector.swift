@@ -153,6 +153,9 @@ open class CollectionDirector: NSObject,
     ///   - indexPath: index path.
     /// - Returns: adapter if any
     internal func adapterForHeaderFooter(_ kind: String, indexPath: IndexPath) -> CollectionHeaderFooterAdapterProtocol? {
+        guard indexPath.section >= 0, indexPath.section < sections.count else {
+            return nil
+        }
         let adapter: CollectionHeaderFooterAdapterProtocol?
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -516,6 +519,9 @@ public extension CollectionDirector {
 	}
 
 	func headerFooterForSection(ofType type: String, at indexPath: IndexPath) -> CollectionHeaderFooterAdapterProtocol? {
+        guard indexPath.section >= 0, indexPath.section < sections.count else {
+            return nil
+        }
 		switch type {
 		case UICollectionView.elementKindSectionHeader:
 			return sections[indexPath.section].headerView
