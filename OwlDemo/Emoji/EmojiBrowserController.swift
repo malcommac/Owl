@@ -36,9 +36,6 @@ public class EmojiBrowserController: UIViewController {
             adapter.events.itemSize = { ctx in
                 return CGSize(width: 50, height: 50)
             }
-            adapter.events.endDisplay = { ctx in
-                debugPrint("end!")
-            }
         }
         director?.registerAdapter(emojiAdapter)
         
