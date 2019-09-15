@@ -473,7 +473,8 @@
 				641CD9C022789E5300C88886 /* Collection */,
 				641CD9E622789EA400C88886 /* Shared */,
 			);
-			path = Sources;
+			name = Sources;
+			path = Sources/Owl;
 			sourceTree = "<group>";
 		};
 		8933C7831EB5B7EB000D00A4 /* Tests */ = {
@@ -583,11 +584,12 @@
 					};
 					52D6D9851BEFF229002C0205 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = GHLS8P2M5V;
 						LastSwiftMigration = 1020;
 					};
 					641CD9EA22789F0C00C88886 = {
 						CreatedOnToolsVersion = 10.2.1;
-						DevelopmentTeam = E5DU3FA699;
+						DevelopmentTeam = GHLS8P2M5V;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -939,6 +941,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = GHLS8P2M5V;
 				INFOPLIST_FILE = Configs/OwlTests.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Owl.Owl-iOS-Tests";
@@ -952,6 +955,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = GHLS8P2M5V;
 				INFOPLIST_FILE = Configs/OwlTests.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Owl.Owl-iOS-Tests";
@@ -973,7 +977,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = E5DU3FA699;
+				DEVELOPMENT_TEAM = GHLS8P2M5V;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OwlDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1000,7 +1004,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = E5DU3FA699;
+				DEVELOPMENT_TEAM = GHLS8P2M5V;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OwlDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
