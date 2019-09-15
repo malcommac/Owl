@@ -12,7 +12,7 @@
 
 import UIKit
 
-public class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableViewProtocol>: CollectionCellAdapterProtocol {
+open class CollectionCellAdapter<Model: ElementRepresentable, Cell: ReusableViewProtocol>: CollectionCellAdapterProtocol {
 
     // MARK: - Public Properties -
 
