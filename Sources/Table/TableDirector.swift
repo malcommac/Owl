@@ -28,27 +28,8 @@ open class TableDirector: NSObject, UITableViewDataSourcePrefetching {
     /// Registered adapters for header/footers.
     private var headerFooterAdapters = [String: TableHeaderFooterAdapterProtocol]()
     
-    /// Cached items. Used to provide an object feedback on `...didEnd` events of the cells.
-    /// Elements are removed after the event is dispatched.
-    private var cachedItems = [IndexPath: ElementRepresentable]()
-    
     /// Is in reload session operation.
-    private var isInReloadSession: Bool = false {
-        didSet {
-            if isInReloadSession == false {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
-                    self.cachedItems.removeAll()
-                }
-            }
-        }
-    }
-    
-    @discardableResult
-    internal func storeInReloadSessionCache(_ element: ElementRepresentable, at indexPath: IndexPath?) -> Bool {
-        guard isInReloadSession, let indexPath = indexPath else { return false }
-        cachedItems[indexPath] = element
-        return true
-    }
+    private var isInReloadSession: Bool = false
     
 	// MARK: - Public Properties -
 
@@ -448,22 +429,6 @@ open class TableDirector: NSObject, UITableViewDataSourcePrefetching {
 		}
 		return (modelInstance, adapter)
 	}
-    
-    /// Cached context return temporary cached element to provide rationalle values for didEnd events which works with removed elements.
-    ///
-    /// - Parameters:
-    ///   - path: path of the element.
-    ///   - removeFromCache: `true` to remove element cache after request. By default is `true`.
-    /// - Returns: cached element and adapter if any.
-    internal func cachedContext(forItemAt path: IndexPath, removeFromCache: Bool = true) -> (model: ElementRepresentable, adapter: TableCellAdapterProtocol)? {
-        guard let modelInstance = cachedItems[path], let adapter = self.cellAdapters[modelInstance.modelClassIdentifier]  else {
-            return nil
-        }
-        if removeFromCache {
-            cachedItems.removeValue(forKey: path)
-        }
-        return (modelInstance, adapter)
-    }
 
 	internal func adapterForCell(_ cell: UITableViewCell) -> TableCellAdapterProtocol? {
 		return cellAdapters.first(where: { item in
@@ -694,13 +659,22 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 		let (model, adapter) = context(forItemAt: indexPath)
 		adapter.dispatchEvent(.willBeginEdit, model: model, cell: nil, path: indexPath, params: nil)
 	}
+    
+    private func adapterForCellClass(_ cell: UITableViewCell?) -> TableCellAdapterProtocol? {
+        guard let cell = cell else { return nil }
+        for adapter in cellAdapters.values {
+            if type(of: cell) == adapter.modelViewType {
+                return adapter
+            }
+        }
+        return nil
+    }
 
 	public func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
 		guard let indexPath = indexPath else { return }
-        if let (model, adapter) = cachedContext(forItemAt: indexPath, removeFromCache: false) {
-            adapter.dispatchEvent(.didEndEdit, model: model, cell: nil, path: indexPath, params: nil)
-        }
-	}
+        let (model, adapter) = context(forItemAt: indexPath)
+        adapter.dispatchEvent(.didEndEdit, model: model, cell: nil, path: indexPath, params: nil)
+    }
 
 	public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
 		let (model, adapter) = context(forItemAt: indexPath)
@@ -723,8 +697,8 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 	}
 
 	public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let result = cachedContext(forItemAt: indexPath, removeFromCache: false)
-        let _ = adapterForCell(cell)?.dispatchEvent(.endDisplay, model: result?.model, cell: cell, path: indexPath, params: nil)
+        let adapter = adapterForCellClass(tableView.cellForRow(at: indexPath))
+        let _ = adapter?.dispatchEvent(.endDisplay, model: nil, cell: cell, path: indexPath, params: nil)
 	}
 
 	public func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {

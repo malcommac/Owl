@@ -146,9 +146,9 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
         let removedElements = allElements
 		allElements = newElements
         
-        for item in removedElements.enumerated() {
+        /*for item in removedElements.enumerated() {
             director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
-        }
+        }*/
 	}
 
 	/// Replace a model instance at specified index.
@@ -161,7 +161,7 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 	public func set(element: ElementRepresentable, at index: Int) -> ElementRepresentable? {
 		guard index >= 0, index < allElements.count else { return nil }
 		let oldElement = allElements[index]
-        director?.storeInReloadSessionCache(oldElement, at: IndexPath(optionalSection: self.index, row: index))
+        //director?.storeInReloadSessionCache(oldElement, at: IndexPath(optionalSection: self.index, row: index))
 		allElements[index] = element
 		return oldElement
 	}
@@ -201,9 +201,9 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 	@discardableResult
 	public func remove(at rowIndex: Int) -> ElementRepresentable? {
 		guard rowIndex < allElements.count else { return nil }
-		let removedElement = allElements.remove(at: rowIndex)
-        director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: rowIndex))
-        return removedElement
+		return allElements.remove(at: rowIndex)
+        //director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: rowIndex))
+        //return removedElement
 	}
 
 	/// Remove elements at given indexes set.
@@ -216,7 +216,7 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 		indexes.reversed().forEach {
 			if $0 < allElements.count {
                 let removedElement = allElements.remove(at: $0)
-                director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: $0))
+                //director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: $0))
 				removed.append(removedElement)
 			}
 		}
@@ -233,9 +233,9 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
         let removedElements = allElements
 		allElements.removeAll(keepingCapacity: kp)
         
-        for item in removedElements.enumerated() {
+        /*for item in removedElements.enumerated() {
             director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
-        }
+        }*/
         
 		return count
 	}
