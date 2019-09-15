@@ -92,6 +92,21 @@ open class CollectionDirector: NSObject,
 		//self.collection?.dragDelegate = self.dragDrop
 		//self.collection?.dropDelegate = self.dragDrop
 	}
+    
+    /// Enable dispatch of prefetching events.
+    public var isPrefetchingEnabled: Bool {
+        set {
+            if #available(iOS 10.0, *) {
+                self.collection?.prefetchDataSource = self
+            }
+        }
+        get {
+            if #available(iOS 10.0, *) {
+                return self.collection?.prefetchDataSource != nil
+            }
+            return false
+        }
+    }
 
 	// MARK: - Register Adapters -
 

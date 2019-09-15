@@ -12,7 +12,7 @@
 
 import UIKit
 
-open class TableDirector: NSObject {
+open class TableDirector: NSObject, UITableViewDataSourcePrefetching {
 
 	// MARK: - Private Properties -
 
@@ -101,6 +101,22 @@ open class TableDirector: NSObject {
 		table.dataSource = self
 		table.delegate = self
 	}
+    
+    /// Enable dispatch of prefetching events.
+    public var isPrefetchingEnabled: Bool {
+        set {
+            if #available(iOS 10.0, *) {
+                self.table?.prefetchDataSource = self
+            }
+        }
+        get {
+            if #available(iOS 10.0, *) {
+                return self.table?.prefetchDataSource != nil
+            }
+            return false
+        }
+    }
+
 
 	// MARK: - Register Cell Adapters -
 	
