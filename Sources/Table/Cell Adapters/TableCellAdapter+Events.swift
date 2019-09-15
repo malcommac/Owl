@@ -34,7 +34,18 @@ public extension TableCellAdapter {
 	class Event {
 
 		// Related table.
-		public private(set) weak var table: UITableView?
+        public var table: UITableView? {
+            guard let cell = (cell as? UITableViewCell),
+                let table = cell.superview as? UITableView else {
+                    return nil
+            }
+            return table
+        }
+        
+        /// Managed source table's bounds size
+        public var tableSize: CGSize? {
+            return table?.bounds.size
+        }
 
 		// Source index path, if available.
 		public let indexPath: IndexPath?
@@ -42,23 +53,13 @@ public extension TableCellAdapter {
 		// Target element of the event.
 		public let element: Model?
 
-		private let _cell: Cell?
-
 		// Target static typed cell if available.
 		// This value maybe `nil` if, at the time of the request, no cell is contextually associable with the event.
-		public var cell: Cell? {
-			guard let indexPath = indexPath else {
-				return nil
-			}
-			guard let cell = _cell else {
-				return table?.cellForRow(at: indexPath) as? Cell
-			}
-			return cell
-		}
+		public var cell: Cell?
 
 		internal init(item: Any? = nil, cell: Any? = nil, indexPath: IndexPath? = nil) {
 			self.element = item as? Model
-			self._cell = cell as? Cell
+			self.cell = cell as? Cell
 			self.indexPath = indexPath
 		}
 
