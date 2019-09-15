@@ -23,29 +23,24 @@ public extension CollectionCellAdapter {
 		public let element: Model
 
 		/// Managed source collection
-		public private(set) weak var collection: UICollectionView?
+        public var collection: UICollectionView? {
+            guard let cell = (cell as? UICollectionViewCell),
+                let collection = cell.superview as? UICollectionView else {
+                    return nil
+            }
+            return collection
+        }
 
 		/// Managed source collection's bounds size
 		public var collectionSize: CGSize? {
-			guard let c = collection else { return nil }
-			return c.bounds.size
+            return collection?.bounds.size
 		}
-
-		/// Internal cell representation. For some events it may be nil.
-		/// You can use public's `cell` property to attempt to get a valid instance of the cell
-		/// (if source events allows it).
-		private let _cell: Cell?
 
 		/// Represented cell instance.
 		/// Depending from the source event where the context is generated it maybe nil.
 		/// When not `nil` it's stricly typed to its parent adapter cell's definition.
-		public var cell: Cell? {
-			guard let c = _cell else {
-				return collection?.cellForItem(at: self.indexPath!) as? Cell
-			}
-			return c
-		}
-
+		public var cell: Cell?
+        
 		/// Initialize a new context from a source event.
 		/// Instances of the Context are generated automatically and received from events; you don't need to allocate on your own.
 		///
@@ -56,7 +51,7 @@ public extension CollectionCellAdapter {
 		///   - collection: parent cell's collection instance
 		internal init(element: Any?, cell: Any?, path: IndexPath?) {
 			self.element = element as! Model
-			self._cell = cell as? Cell
+			self.cell = cell as? Cell
 			self.indexPath = path
 		}
 

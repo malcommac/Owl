@@ -118,12 +118,7 @@ open class CollectionSection: Equatable, Copying, DifferentiableSection {
 	// MARK: - Content Managegment -
 	
 	public func set(elements newElements: [ElementRepresentable]) {
-        let removedElements = elements
 		elements = newElements
-        
-        for item in removedElements.enumerated() {
-            director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
-        }
 	}
 	
 	/// Replace a model instance at specified index.
@@ -175,9 +170,7 @@ open class CollectionSection: Equatable, Copying, DifferentiableSection {
 	@discardableResult
 	public func remove(at rowIndex: Int) -> ElementRepresentable? {
 		guard rowIndex < elements.count else { return nil }
-		let removedElement = elements.remove(at: rowIndex)
-        director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: rowIndex))
-        return removedElement
+		return elements.remove(at: rowIndex)
 	}
 	
 	/// Remove model at given indexes set.
@@ -189,9 +182,7 @@ open class CollectionSection: Equatable, Copying, DifferentiableSection {
 		var removed: [ElementRepresentable] = []
 		indexes.reversed().forEach {
 			if $0 < elements.count {
-                let removedElement = elements.remove(at: $0)
-                director?.storeInReloadSessionCache(removedElement, at: IndexPath(optionalSection: self.index, row: $0))
-                removed.append(removedElement)
+                removed.append(elements.remove(at: $0))
 			}
 		}
 		return removed
@@ -204,13 +195,7 @@ open class CollectionSection: Equatable, Copying, DifferentiableSection {
 	@discardableResult
 	public func removeAll(keepingCapacity kp: Bool = false) -> Int {
 		let count = elements.count
-        let removedElements = elements
 		elements.removeAll(keepingCapacity: kp)
-        
-        for item in removedElements.enumerated() {
-            director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
-        }
-        
 		return count
 	}
 	

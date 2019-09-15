@@ -16,7 +16,7 @@
 		641CD9B222789E3700C88886 /* TableHeaderFooterAdapter+Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B022789E3700C88886 /* TableHeaderFooterAdapter+Support.swift */; };
 		641CD9B322789E3700C88886 /* TableHeaderFooterAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B122789E3700C88886 /* TableHeaderFooterAdapter.swift */; };
 		641CD9B722789E4100C88886 /* TableCellAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B522789E4100C88886 /* TableCellAdapter.swift */; };
-		641CD9B822789E4100C88886 /* TableCellAdapter+Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B622789E4100C88886 /* TableCellAdapter+Support.swift */; };
+		641CD9B822789E4100C88886 /* TableCellAdapter+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B622789E4100C88886 /* TableCellAdapter+Events.swift */; };
 		641CD9BD22789E5100C88886 /* CollectionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9BA22789E5100C88886 /* CollectionSection.swift */; };
 		641CD9BE22789E5100C88886 /* CollectionDirector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9BB22789E5100C88886 /* CollectionDirector.swift */; };
 		641CD9BF22789E5100C88886 /* FlowCollectionDirector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9BC22789E5100C88886 /* FlowCollectionDirector.swift */; };
@@ -68,7 +68,7 @@
 		641CDA3922789FFF00C88886 /* TableDirector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9A422789E1600C88886 /* TableDirector.swift */; };
 		641CDA3A22789FFF00C88886 /* TableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9A522789E1600C88886 /* TableSection.swift */; };
 		641CDA3B22789FFF00C88886 /* TableCellAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B522789E4100C88886 /* TableCellAdapter.swift */; };
-		641CDA3C22789FFF00C88886 /* TableCellAdapter+Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B622789E4100C88886 /* TableCellAdapter+Support.swift */; };
+		641CDA3C22789FFF00C88886 /* TableCellAdapter+Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B622789E4100C88886 /* TableCellAdapter+Events.swift */; };
 		641CDA3D22789FFF00C88886 /* TableHeaderFooterAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B122789E3700C88886 /* TableHeaderFooterAdapter.swift */; };
 		641CDA3E22789FFF00C88886 /* TableHeaderFooterAdapter+Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9B022789E3700C88886 /* TableHeaderFooterAdapter+Support.swift */; };
 		641CDA3F22789FFF00C88886 /* TableCellAdapterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641CD9AB22789E2B00C88886 /* TableCellAdapterProtocol.swift */; };
@@ -120,7 +120,7 @@
 		641CD9B022789E3700C88886 /* TableHeaderFooterAdapter+Support.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TableHeaderFooterAdapter+Support.swift"; sourceTree = "<group>"; };
 		641CD9B122789E3700C88886 /* TableHeaderFooterAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableHeaderFooterAdapter.swift; sourceTree = "<group>"; };
 		641CD9B522789E4100C88886 /* TableCellAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableCellAdapter.swift; sourceTree = "<group>"; };
-		641CD9B622789E4100C88886 /* TableCellAdapter+Support.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TableCellAdapter+Support.swift"; sourceTree = "<group>"; };
+		641CD9B622789E4100C88886 /* TableCellAdapter+Events.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TableCellAdapter+Events.swift"; sourceTree = "<group>"; };
 		641CD9BA22789E5100C88886 /* CollectionSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionSection.swift; sourceTree = "<group>"; };
 		641CD9BB22789E5100C88886 /* CollectionDirector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionDirector.swift; sourceTree = "<group>"; };
 		641CD9BC22789E5100C88886 /* FlowCollectionDirector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowCollectionDirector.swift; sourceTree = "<group>"; };
@@ -269,7 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				641CD9B522789E4100C88886 /* TableCellAdapter.swift */,
-				641CD9B622789E4100C88886 /* TableCellAdapter+Support.swift */,
+				641CD9B622789E4100C88886 /* TableCellAdapter+Events.swift */,
 			);
 			path = "Cell Adapters";
 			sourceTree = "<group>";
@@ -473,7 +473,8 @@
 				641CD9C022789E5300C88886 /* Collection */,
 				641CD9E622789EA400C88886 /* Shared */,
 			);
-			path = Sources;
+			name = Sources;
+			path = Sources/Owl;
 			sourceTree = "<group>";
 		};
 		8933C7831EB5B7EB000D00A4 /* Tests */ = {
@@ -583,11 +584,12 @@
 					};
 					52D6D9851BEFF229002C0205 = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = GHLS8P2M5V;
 						LastSwiftMigration = 1020;
 					};
 					641CD9EA22789F0C00C88886 = {
 						CreatedOnToolsVersion = 10.2.1;
-						DevelopmentTeam = E5DU3FA699;
+						DevelopmentTeam = GHLS8P2M5V;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -671,7 +673,7 @@
 				641CD9DC22789E8F00C88886 /* StagedChangeset+Sectioned.swift in Sources */,
 				641CD9AC22789E2B00C88886 /* TableDirector+Support.swift in Sources */,
 				641CD9C922789E6F00C88886 /* CollectionHeaderFooterAdapter.swift in Sources */,
-				641CD9B822789E4100C88886 /* TableCellAdapter+Support.swift in Sources */,
+				641CD9B822789E4100C88886 /* TableCellAdapter+Events.swift in Sources */,
 				641CD9AE22789E2B00C88886 /* TableCellAdapterProtocol.swift in Sources */,
 				641CD9DD22789E8F00C88886 /* ElementPath.swift in Sources */,
 				641CD9BF22789E5100C88886 /* FlowCollectionDirector.swift in Sources */,
@@ -722,7 +724,7 @@
 				641CDA4322789FFF00C88886 /* CollectionSection.swift in Sources */,
 				641CDA3922789FFF00C88886 /* TableDirector.swift in Sources */,
 				641CDA0D22789F6900C88886 /* ContactCompany.swift in Sources */,
-				641CDA3C22789FFF00C88886 /* TableCellAdapter+Support.swift in Sources */,
+				641CDA3C22789FFF00C88886 /* TableCellAdapter+Events.swift in Sources */,
 				641CDA3622789FD200C88886 /* UIImageView+Extras.swift in Sources */,
 				641CDA4622789FFF00C88886 /* CollectionCellAdapter+Events.swift in Sources */,
 				641CDA5422789FFF00C88886 /* UITableView+Support.swift in Sources */,
@@ -825,7 +827,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -879,7 +881,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -902,7 +904,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Configs/Owl.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Owl.Owl-iOS";
@@ -925,7 +927,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Configs/Owl.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Owl.Owl-iOS";
 				PRODUCT_NAME = Owl;
@@ -939,6 +941,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = GHLS8P2M5V;
 				INFOPLIST_FILE = Configs/OwlTests.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Owl.Owl-iOS-Tests";
@@ -952,6 +955,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = GHLS8P2M5V;
 				INFOPLIST_FILE = Configs/OwlTests.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Owl.Owl-iOS-Tests";
@@ -973,10 +977,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = E5DU3FA699;
+				DEVELOPMENT_TEAM = GHLS8P2M5V;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OwlDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -1000,10 +1004,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = E5DU3FA699;
+				DEVELOPMENT_TEAM = GHLS8P2M5V;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = OwlDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.danielemargutti.OwlDemo;

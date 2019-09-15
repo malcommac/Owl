@@ -52,6 +52,22 @@ public class ContactsController: UIViewController {
                 self.openCompanyPeople(ctx.element)
                 return .deselectAnimated
             }
+            dr.events.canEditRow = { ctx in
+                return true
+            }
+            dr.events.editStyle = { ctx in
+                return .delete
+            }
+            dr.events.deleteConfirmTitle = { ctx in
+                return "Remove"
+            }
+            dr.events.commitEdit = { (ctx, action) in
+                guard let indexPath = ctx.indexPath else { return }
+                self.director?.reload(afterUpdate: { _ in
+                    self.director?.remove(indexPath: indexPath)
+                    return .automatic
+                }, completion: nil)
+            }
         }
         director?.registerCellAdapter(companyItem)
 

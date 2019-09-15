@@ -34,26 +34,11 @@ open class CollectionDirector: NSObject,
     
     /// Cached items. Used to provide an object feedback on `...didEnd` events of the cells.
     /// Elements are removed after the event is dispatched.
-    private var cachedItems = [IndexPath: ElementRepresentable]()
+   // private var cachedItems = [IndexPath: ElementRepresentable]()
     
     /// Is in reload session operation.
-    private var isInReloadSession: Bool = false {
-        didSet {
-            if isInReloadSession == false {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
-                    self.cachedItems.removeAll()
-                }
-            }
-        }
-    }
+    private var isInReloadSession: Bool = false
     
-    @discardableResult
-    internal func storeInReloadSessionCache(_ element: ElementRepresentable, at indexPath: IndexPath?) -> Bool {
-        guard isInReloadSession, let indexPath = indexPath else { return false }
-        cachedItems[indexPath] = element
-        return true
-    }
-
 	//MARK: - Public Properties -
 
 	/// Managed collection view
@@ -92,6 +77,21 @@ open class CollectionDirector: NSObject,
 		//self.collection?.dragDelegate = self.dragDrop
 		//self.collection?.dropDelegate = self.dragDrop
 	}
+    
+    /// Enable dispatch of prefetching events.
+    public var isPrefetchingEnabled: Bool {
+        set {
+            if #available(iOS 10.0, *) {
+                self.collection?.prefetchDataSource = self
+            }
+        }
+        get {
+            if #available(iOS 10.0, *) {
+                return self.collection?.prefetchDataSource != nil
+            }
+            return false
+        }
+    }
 
 	// MARK: - Register Adapters -
 
@@ -153,6 +153,9 @@ open class CollectionDirector: NSObject,
     ///   - indexPath: index path.
     /// - Returns: adapter if any
     internal func adapterForHeaderFooter(_ kind: String, indexPath: IndexPath) -> CollectionHeaderFooterAdapterProtocol? {
+        guard indexPath.section >= 0, indexPath.section < sections.count else {
+            return nil
+        }
         let adapter: CollectionHeaderFooterAdapterProtocol?
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -254,6 +257,12 @@ open class CollectionDirector: NSObject,
 		sections.removeAll(keepingCapacity: kp)
 		return count
 	}
+    
+    /// Remove item at specified index path.
+    @discardableResult
+    public func remove(indexPath: IndexPath) -> ElementRepresentable? {
+        return sectionAt(indexPath.section)?.remove(at: indexPath.row)
+    }
 
 	/// Remove section at index from the collection.
 	/// If index is not valid it does nothing.
@@ -347,7 +356,7 @@ open class CollectionDirector: NSObject,
     ///   - path: path of the element.
     ///   - removeFromCache: `true` to remove element cache after request. By default is `true`.
     /// - Returns: cached element and adapter if any.
-    internal func cachedContext(forItemAt path: IndexPath, removeFromCache: Bool = true) -> (model: ElementRepresentable, adapter: CollectionCellAdapterProtocol)? {
+    /*internal func cachedContext(forItemAt path: IndexPath, removeFromCache: Bool = true) -> (model: ElementRepresentable, adapter: CollectionCellAdapterProtocol)? {
         guard let modelInstance = cachedItems[path], let adapter = self.cellAdapters[modelInstance.modelClassIdentifier]  else {
             return nil
         }
@@ -355,7 +364,7 @@ open class CollectionDirector: NSObject,
             cachedItems.removeValue(forKey: path)
         }
         return (modelInstance, adapter)
-    }
+    }*/
     
 }
 
@@ -382,9 +391,19 @@ public extension CollectionDirector {
 	}
 
 	func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let result = cachedContext(forItemAt: indexPath, removeFromCache: false)
-        let _ = adapterForCell(cell)?.dispatchEvent(.endDisplay, model: result?.model, cell: cell, path: indexPath, params: nil)
+        let (model, adapter) = context(forItemAt: indexPath)
+        let _ = adapter.dispatchEvent(.endDisplay, model: model, cell: cell, path: indexPath, params: nil)
 	}
+    
+    private func adapterForCellClass(_ cell: UICollectionViewCell?) -> CollectionCellAdapterProtocol? {
+        guard let cell = cell else { return nil }
+        for adapter in cellAdapters.values {
+            if type(of: cell) == adapter.modelViewType {
+                return adapter
+            }
+        }
+        return nil
+    }
 
 	// MARK: - Select -
 
@@ -395,7 +414,7 @@ public extension CollectionDirector {
 
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		let (model, adapter) = context(forItemAt: indexPath)
-		adapter.dispatchEvent(.didSelect, model: model, cell: nil, path: indexPath, params: nil)
+		adapter.dispatchEvent(.didSelect, model: model, cell: collectionView.cellForItem(at: indexPath), path: indexPath, params: nil)
 	}
 
 	// MARK: - Deselect -
@@ -516,6 +535,9 @@ public extension CollectionDirector {
 	}
 
 	func headerFooterForSection(ofType type: String, at indexPath: IndexPath) -> CollectionHeaderFooterAdapterProtocol? {
+        guard indexPath.section >= 0, indexPath.section < sections.count else {
+            return nil
+        }
 		switch type {
 		case UICollectionView.elementKindSectionHeader:
 			return sections[indexPath.section].headerView
@@ -561,7 +583,7 @@ public extension CollectionDirector {
     
     internal func adapterForCell(_ cell: UICollectionViewCell) -> CollectionCellAdapterProtocol? {
         return cellAdapters.first(where: { item in
-            return item.value.modelCellType == type(of: cell)
+            return item.value.modelViewType == type(of: cell)
         })?.value
     }
 
