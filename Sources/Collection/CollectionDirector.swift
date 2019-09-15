@@ -37,23 +37,8 @@ open class CollectionDirector: NSObject,
    // private var cachedItems = [IndexPath: ElementRepresentable]()
     
     /// Is in reload session operation.
-    private var isInReloadSession: Bool = false /*{
-        didSet {
-            if isInReloadSession == false {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
-                    self.cachedItems.removeAll()
-                }
-            }
-        }
-    }*/
+    private var isInReloadSession: Bool = false
     
-  /*  @discardableResult
-    internal func storeInReloadSessionCache(_ element: ElementRepresentable, at indexPath: IndexPath?) -> Bool {
-        guard isInReloadSession, let indexPath = indexPath else { return false }
-        cachedItems[indexPath] = element
-        return true
-    }
-*/
 	//MARK: - Public Properties -
 
 	/// Managed collection view
@@ -272,6 +257,12 @@ open class CollectionDirector: NSObject,
 		sections.removeAll(keepingCapacity: kp)
 		return count
 	}
+    
+    /// Remove item at specified index path.
+    @discardableResult
+    public func remove(indexPath: IndexPath) -> ElementRepresentable? {
+        return sectionAt(indexPath.section)?.remove(at: indexPath.row)
+    }
 
 	/// Remove section at index from the collection.
 	/// If index is not valid it does nothing.

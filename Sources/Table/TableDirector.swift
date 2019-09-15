@@ -235,7 +235,7 @@ open class TableDirector: NSObject, UITableViewDataSourcePrefetching {
 	///
 	/// - Parameter index: index of the section to get.
 	/// - Returns: `TableSection`
-	public func section(at index: Int) -> TableSection? {
+	public func sectionAt(_ index: Int) -> TableSection? {
 		guard index < sections.count else {
 			return nil
 		}
@@ -267,6 +267,12 @@ open class TableDirector: NSObject, UITableViewDataSourcePrefetching {
 	
 	// MARK: - Remove Sections -
 	
+    /// Remove item at specified index path.
+    @discardableResult
+    public func remove(indexPath: IndexPath) -> ElementRepresentable? {
+        return sectionAt(indexPath.section)?.remove(at: indexPath.row)
+    }
+    
 	/// Remove section at specified index.
 	/// If `index` is invalid no action is made and function return `nil`.
 	///
@@ -697,8 +703,9 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 	}
 
 	public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let adapter = adapterForCellClass(tableView.cellForRow(at: indexPath))
-        let _ = adapter?.dispatchEvent(.endDisplay, model: nil, cell: cell, path: indexPath, params: nil)
+        //let adapter = adapterForCellClass(tableView.cellForRow(at: indexPath))
+        let (model, adapter) = context(forItemAt: indexPath)
+        let _ = adapter.dispatchEvent(.endDisplay, model: model, cell: cell, path: indexPath, params: nil)
 	}
 
 	public func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
