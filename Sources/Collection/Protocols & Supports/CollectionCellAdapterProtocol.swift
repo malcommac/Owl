@@ -15,7 +15,7 @@ import UIKit
 public protocol CollectionCellAdapterProtocol {
 
 	var modelType: Any.Type { get }
-	var modelCellType: Any.Type { get }
+	var modelViewType: Any.Type { get }
 	var modelIdentifier: String { get }
 
 	func dequeueCell(inCollection: UICollectionView, at indexPath: IndexPath) -> UICollectionViewCell

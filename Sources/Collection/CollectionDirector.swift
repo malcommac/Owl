@@ -398,7 +398,7 @@ public extension CollectionDirector {
     private func adapterForCellClass(_ cell: UICollectionViewCell?) -> CollectionCellAdapterProtocol? {
         guard let cell = cell else { return nil }
         for adapter in cellAdapters.values {
-            if type(of: cell) == adapter.modelCellType {
+            if type(of: cell) == adapter.modelViewType {
                 return adapter
             }
         }
@@ -583,7 +583,7 @@ public extension CollectionDirector {
     
     internal func adapterForCell(_ cell: UICollectionViewCell) -> CollectionCellAdapterProtocol? {
         return cellAdapters.first(where: { item in
-            return item.value.modelCellType == type(of: cell)
+            return item.value.modelViewType == type(of: cell)
         })?.value
     }
 
