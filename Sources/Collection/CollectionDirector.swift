@@ -34,10 +34,10 @@ open class CollectionDirector: NSObject,
     
     /// Cached items. Used to provide an object feedback on `...didEnd` events of the cells.
     /// Elements are removed after the event is dispatched.
-    private var cachedItems = [IndexPath: ElementRepresentable]()
+   // private var cachedItems = [IndexPath: ElementRepresentable]()
     
     /// Is in reload session operation.
-    private var isInReloadSession: Bool = false {
+    private var isInReloadSession: Bool = false /*{
         didSet {
             if isInReloadSession == false {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.30) {
@@ -45,15 +45,15 @@ open class CollectionDirector: NSObject,
                 }
             }
         }
-    }
+    }*/
     
-    @discardableResult
+  /*  @discardableResult
     internal func storeInReloadSessionCache(_ element: ElementRepresentable, at indexPath: IndexPath?) -> Bool {
         guard isInReloadSession, let indexPath = indexPath else { return false }
         cachedItems[indexPath] = element
         return true
     }
-
+*/
 	//MARK: - Public Properties -
 
 	/// Managed collection view
@@ -365,7 +365,7 @@ open class CollectionDirector: NSObject,
     ///   - path: path of the element.
     ///   - removeFromCache: `true` to remove element cache after request. By default is `true`.
     /// - Returns: cached element and adapter if any.
-    internal func cachedContext(forItemAt path: IndexPath, removeFromCache: Bool = true) -> (model: ElementRepresentable, adapter: CollectionCellAdapterProtocol)? {
+    /*internal func cachedContext(forItemAt path: IndexPath, removeFromCache: Bool = true) -> (model: ElementRepresentable, adapter: CollectionCellAdapterProtocol)? {
         guard let modelInstance = cachedItems[path], let adapter = self.cellAdapters[modelInstance.modelClassIdentifier]  else {
             return nil
         }
@@ -373,7 +373,7 @@ open class CollectionDirector: NSObject,
             cachedItems.removeValue(forKey: path)
         }
         return (modelInstance, adapter)
-    }
+    }*/
     
 }
 
@@ -400,9 +400,19 @@ public extension CollectionDirector {
 	}
 
 	func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let result = cachedContext(forItemAt: indexPath, removeFromCache: false)
-        let _ = adapterForCell(cell)?.dispatchEvent(.endDisplay, model: result?.model, cell: cell, path: indexPath, params: nil)
+        let (model, adapter) = context(forItemAt: indexPath)
+        let _ = adapter.dispatchEvent(.endDisplay, model: model, cell: cell, path: indexPath, params: nil)
 	}
+    
+    private func adapterForCellClass(_ cell: UICollectionViewCell?) -> CollectionCellAdapterProtocol? {
+        guard let cell = cell else { return nil }
+        for adapter in cellAdapters.values {
+            if type(of: cell) == adapter.modelCellType {
+                return adapter
+            }
+        }
+        return nil
+    }
 
 	// MARK: - Select -
 

@@ -143,12 +143,7 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
     ///
     /// - Parameter newElements: new elements.
 	public func set(elements newElements: [ElementRepresentable]) {
-        let removedElements = allElements
 		allElements = newElements
-        
-        /*for item in removedElements.enumerated() {
-            director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
-        }*/
 	}
 
 	/// Replace a model instance at specified index.
@@ -230,13 +225,7 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 	@discardableResult
 	public func removeAll(keepingCapacity kp: Bool = false) -> Int {
 		let count = allElements.count
-        let removedElements = allElements
 		allElements.removeAll(keepingCapacity: kp)
-        
-        /*for item in removedElements.enumerated() {
-            director?.storeInReloadSessionCache(item.element, at: IndexPath(optionalSection: self.index, row: item.offset))
-        }*/
-        
 		return count
 	}
 

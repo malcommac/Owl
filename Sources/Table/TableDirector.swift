@@ -435,6 +435,16 @@ open class TableDirector: NSObject, UITableViewDataSourcePrefetching {
 			return item.value.modelViewType == type(of: cell)
 		})?.value
 	}
+    
+    private func adapterForCellClass(_ cell: UITableViewCell?) -> TableCellAdapterProtocol? {
+        guard let cell = cell else { return nil }
+        for adapter in cellAdapters.values {
+            if type(of: cell) == adapter.modelViewType {
+                return adapter
+            }
+        }
+        return nil
+    }
 
 }
 
@@ -659,16 +669,6 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 		let (model, adapter) = context(forItemAt: indexPath)
 		adapter.dispatchEvent(.willBeginEdit, model: model, cell: nil, path: indexPath, params: nil)
 	}
-    
-    private func adapterForCellClass(_ cell: UITableViewCell?) -> TableCellAdapterProtocol? {
-        guard let cell = cell else { return nil }
-        for adapter in cellAdapters.values {
-            if type(of: cell) == adapter.modelViewType {
-                return adapter
-            }
-        }
-        return nil
-    }
 
 	public func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
 		guard let indexPath = indexPath else { return }

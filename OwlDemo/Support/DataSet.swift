@@ -24,7 +24,7 @@ public class DataSet {
             return $0
         })
 		
-		self.emoji = generateEmojiSections(3, elements: 10)
+		self.emoji = generateEmojiSections(3, elements: 200)
     }
 	
 	private func generateEmojiSections(_ sections: Int = 3, elements: Int? = nil) -> [[String]] {
