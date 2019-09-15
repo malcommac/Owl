@@ -398,7 +398,7 @@ public extension CollectionDirector {
 
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		let (model, adapter) = context(forItemAt: indexPath)
-		adapter.dispatchEvent(.didSelect, model: model, cell: nil, path: indexPath, params: nil)
+		adapter.dispatchEvent(.didSelect, model: model, cell: collectionView.cellForItem(at: indexPath), path: indexPath, params: nil)
 	}
 
 	// MARK: - Deselect -
