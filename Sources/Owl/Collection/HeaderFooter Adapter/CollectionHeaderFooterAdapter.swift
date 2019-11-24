@@ -30,7 +30,7 @@ public extension CollectionHeaderFooterAdapterProtocol {
     
 }
 
-public class CollectionHeaderFooterAdapter<View: UICollectionReusableView>: CollectionHeaderFooterAdapterProtocol {
+open class CollectionHeaderFooterAdapter<View: UICollectionReusableView>: CollectionHeaderFooterAdapterProtocol {
     
     /// This is the cell type used to dequeue the model. You should not alter it.
     public var modelCellType: Any.Type = View.self

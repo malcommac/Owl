@@ -12,7 +12,7 @@
 
 import UIKit
 
-public class TableSection: Equatable, Copying, DifferentiableSection {
+open class TableSection: Equatable, Copying, DifferentiableSection {
 
 	// MARK: - Public Properties -
 
@@ -95,7 +95,7 @@ public class TableSection: Equatable, Copying, DifferentiableSection {
 
 	// MARK: - Initialization -
 
-	required init(original: TableSection) {
+    required public init(original: TableSection) {
 		self.allElements = original.allElements
 		self.identifier = original.identifier
 		self.headerTitle = original.headerTitle

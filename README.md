@@ -36,7 +36,7 @@ Owl was created and maintaned by [Daniele Margutti](https://github.com/malcommac
 The preferred installation method is with CocoaPods. Add the following to your `Podfile`:
 
 ```ruby
-pod 'OwlKit', '~> 1.0'
+pod 'OwlKit'
 ```
 
 Also you can install Owl using Carthage. Add this to your `Cartfile`:
@@ -44,6 +44,8 @@ Also you can install Owl using Carthage. Add this to your `Cartfile`:
 ```
 github "malcommac/Owl"
 ```
+
+Owl is also compatible with SPM (Swift Package Manager) for Swift 5.x+
 
 ## What you will get
 
