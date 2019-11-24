@@ -34,7 +34,7 @@ public extension TableHeaderFooterAdapterProtocol {
 
 // MARK: - TableHeaderFooterAdapter -
 
-public class TableHeaderFooterAdapter<View: UITableViewHeaderFooterView>: TableHeaderFooterAdapterProtocol {
+open class TableHeaderFooterAdapter<View: UITableViewHeaderFooterView>: TableHeaderFooterAdapterProtocol {
     
     // MARK: - Public Properties -
     

@@ -391,8 +391,10 @@ public extension CollectionDirector {
 	}
 
 	func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        let (model, adapter) = context(forItemAt: indexPath)
-        let _ = adapter.dispatchEvent(.endDisplay, model: model, cell: cell, path: indexPath, params: nil)
+        guard let adapter = adapterForCell(cell) else {
+            return
+        }
+        let _ = adapter.dispatchEvent(.endDisplay, model: nil, cell: cell, path: indexPath, params: nil)
 	}
     
     private func adapterForCellClass(_ cell: UICollectionViewCell?) -> CollectionCellAdapterProtocol? {

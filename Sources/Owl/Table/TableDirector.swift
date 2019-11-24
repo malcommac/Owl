@@ -703,9 +703,10 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 	}
 
 	public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        //let adapter = adapterForCellClass(tableView.cellForRow(at: indexPath))
-        let (model, adapter) = context(forItemAt: indexPath)
-        let _ = adapter.dispatchEvent(.endDisplay, model: model, cell: cell, path: indexPath, params: nil)
+        guard let adapter = adapterForCellClass(cell) else {
+            return
+        }
+        let _ = adapter.dispatchEvent(.endDisplay, model: nil, cell: cell, path: indexPath, params: nil)
 	}
 
 	public func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
