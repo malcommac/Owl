@@ -20,7 +20,7 @@ public extension CollectionCellAdapter {
 		public let indexPath: IndexPath?
 
 		/// Represented model instance
-		public let element: Model
+		public let element: Model?
 
 		/// Managed source collection
         public var collection: UICollectionView? {
@@ -50,7 +50,7 @@ public extension CollectionCellAdapter {
 		///   - path: cell's path
 		///   - collection: parent cell's collection instance
 		internal init(element: Any?, cell: Any?, path: IndexPath?) {
-			self.element = element as! Model
+			self.element = element as? Model
 			self.cell = cell as? Cell
 			self.indexPath = path
 		}

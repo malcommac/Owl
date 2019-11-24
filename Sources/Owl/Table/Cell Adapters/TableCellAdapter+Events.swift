@@ -51,14 +51,14 @@ public extension TableCellAdapter {
 		public let indexPath: IndexPath?
 
 		// Target element of the event.
-		public let element: Model
+		public let element: Model?
 
 		// Target static typed cell if available.
 		// This value maybe `nil` if, at the time of the request, no cell is contextually associable with the event.
 		public var cell: Cell?
 
 		internal init(item: Any? = nil, cell: Any? = nil, indexPath: IndexPath? = nil) {
-			self.element = item as! Model
+			self.element = item as? Model
 			self.cell = cell as? Cell
 			self.indexPath = indexPath
 		}
