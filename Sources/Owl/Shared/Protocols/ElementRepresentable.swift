@@ -31,6 +31,12 @@ public protocol Differentiable {
     func isContentEqual(to other: Differentiable) -> Bool
 }
 
+public extension Differentiable {
+    func isContentEqual(to other: Differentiable) -> Bool {
+        return self.differenceIdentifier == other.differenceIdentifier
+    }
+}
+
 // MARK: - ElementRepresentable -
 
 public protocol ElementRepresentable: Differentiable {
