@@ -678,6 +678,9 @@ extension TableDirector: UITableViewDataSource, UITableViewDelegate {
 
 	public func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?) {
 		guard let indexPath = indexPath else { return }
+        if indexPath.row >= tableView.numberOfRows(inSection: indexPath.section) {
+            return
+        }
         let (model, adapter) = context(forItemAt: indexPath)
         adapter.dispatchEvent(.didEndEdit, model: model, cell: nil, path: indexPath, params: nil)
     }
