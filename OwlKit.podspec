@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "OwlKit"
-  s.version      = "1.1.1"
+  s.version      = "1.1.2"
   s.summary      = "A declarative type-safe framework for building fast and flexible list with Tables & Collections"
   s.description  = <<-DESC
     Owl offers a data-driven declarative approach for building fast & flexible list in iOS. It supports both UICollectionView & UITableView; UIStackView is on the way!.
